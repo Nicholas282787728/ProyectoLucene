@@ -5,7 +5,12 @@
  */
 package luceneprueba;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.file.FileSystems;
+import java.util.Scanner;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -19,47 +24,48 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.RAMDirectory;
+import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.store.SimpleFSDirectory;
 
 public class LucenePrueba {
 
     public static void main(String[] args) throws IOException {
         try{
-            Analyzer analyzer = new StandardAnalyzer();
-
-            // Store the index in memory:
-            Directory directory = new RAMDirectory();
-            // To store an index on disk, use this instead:
-            //Directory directory = FSDirectory.open("/tmp/testindex");
-            IndexWriterConfig config = new IndexWriterConfig(analyzer);
-            IndexWriter iwriter = new IndexWriter(directory, config);
-            
-            Document doc = new Document();
-            String text = "This is the text to be indexed HOLA.";
-            doc.add(new Field("fieldname", text, TextField.TYPE_STORED));
-            iwriter.addDocument(doc);
-            
-            doc = new Document();
-            doc.add(new Field("fieldname", "hola chao", TextField.TYPE_STORED));
-            iwriter.addDocument(doc);
-            
-            iwriter.close();
-            
-            // Now search the index:
-            DirectoryReader ireader = DirectoryReader.open(directory);
-            IndexSearcher isearcher = new IndexSearcher(ireader);
-            // Parse a simple query that searches for "text":
-            QueryParser parser = new QueryParser("fieldname", analyzer);
-            Query query = parser.parse("hola");
-            ScoreDoc[] hits = isearcher.search(query, 2).scoreDocs;
-            // Iterate through the results:
-            System.out.println("hits length: "+hits.length);
-            for (ScoreDoc hit : hits) {
-                Document hitDoc = isearcher.doc(hit.doc);
-                System.out.println("Resultado: "+ hitDoc.get("fieldname"));
+            int opcion;
+            Index index = new Index("files/", "indice_invertido");                        
+            do{
+                System.out.flush();
+                System.out.println("Opciones:");
+                System.out.println("1. Crear índice invertido");
+                System.out.println("2. Buscar en el índice invertido");
+                System.out.println("3. Salir");
+                System.out.print("Elija una opción: ");
+                //BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+                //opcion = br.;
+                Scanner in = new Scanner(System.in);
+                opcion = in.nextInt();
+                
+                switch(opcion){
+                    case 1:
+                        index.create();
+                        System.out.println("Índice creado con éxito");
+                        break;
+                    case 2:
+                        Reader reader = new Reader(index.getDirectory(), index.getAnalyzer());
+                        System.out.print("Ingrese la palabra a buscar: ");
+                        reader.searchOnIndex(in.next());
+                        break;
+                    case 3:
+                        break;
+                    default:
+                        System.out.println("Opción inválida");
+                        break;
+                }
             }
-            ireader.close();
-            directory.close();
+            while(opcion != 3);
+            
+            index.getDirectory().close();
+            
         }
         catch(Exception e){
             System.out.println(e);
