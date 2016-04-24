@@ -11,6 +11,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.util.Iterator;
+
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -26,6 +27,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import luceneprueba.CustomAnalyzers.ReviewAnalyzer;
 /**
  *
  * @author JAno
@@ -35,8 +37,9 @@ public class Index {
     private String indexName;
     private String jsonFilePath;
     private final Directory directory;
-    private final Analyzer analyzer = new StandardAnalyzer();
-    private final Analyzer indexAnalyzer = new StandardAnalyzer();
+    private final Analyzer analyzer = new ReviewAnalyzer();
+    //private final Analyzer analyzer = new StandardAnalyzer();
+    //private final Analyzer indexAnalyzer = new StandardAnalyzer();
     
     public Index(String path, String indexName) throws IOException{
         this.path = path;

@@ -25,6 +25,7 @@ import org.apache.lucene.store.Directory;
 public class Reader {
     private final DirectoryReader indexReader;
     private final IndexSearcher indexSearcher;
+    //private Analyzer analyzer;
     private final Analyzer analyzer;
     
     public Reader(Directory directory, Analyzer analyzer) throws IOException{
@@ -41,6 +42,11 @@ public class Reader {
         return indexSearcher;
     }
     
+    /* // TODO: Fix setAnalyzer
+    public setAnalyzer(Analyzer analyzer) {
+        this.analyzer = analyzer;
+    }
+    */
     public void searchOnIndex(String wordQuery){
         // Parse a simple query that searches for "text":
         QueryParser parser = new QueryParser("review", analyzer);
