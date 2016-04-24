@@ -14,5 +14,5 @@
 
 ## TODO LIST
 
-[] Add on index.
-[] Search on index.
+* [] Add on index.
+* [X] Search on index.
