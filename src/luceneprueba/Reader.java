@@ -23,38 +23,43 @@ import org.apache.lucene.store.Directory;
  * @author JAno
  */
 public class Reader {
-    private final DirectoryReader ireader;
-    private final IndexSearcher isearcher;
+    private final DirectoryReader indexReader;
+    private final IndexSearcher indexSearcher;
     private final Analyzer analyzer;
     
     public Reader(Directory directory, Analyzer analyzer) throws IOException{
-        this.ireader = DirectoryReader.open(directory);
-        this.isearcher = new IndexSearcher(this.ireader);
+        this.indexReader = DirectoryReader.open(directory);
+        this.indexSearcher = new IndexSearcher(this.indexReader);
         this.analyzer = analyzer;
     }
 
-    public DirectoryReader getIreader() {
-        return ireader;
+    public DirectoryReader getIndexReader() {
+        return indexReader;
     }
 
-    public IndexSearcher getIsearcher() {
-        return isearcher;
+    public IndexSearcher getIndexSearcher() {
+        return indexSearcher;
     }
     
-    public void searchOnIndex(String word){
+    public void searchOnIndex(String wordQuery){
         // Parse a simple query that searches for "text":
         QueryParser parser = new QueryParser("review", analyzer);
         Query query;
         try {
-            query = parser.parse(word);
-            ScoreDoc[] hits = isearcher.search(query, 1000).scoreDocs;
-            // Iterate through the results:
-            System.out.println("hits length: "+hits.length);
-            for (ScoreDoc hit : hits) {
-                Document hitDoc = isearcher.doc(hit.doc);
-                System.out.println("Resultado: "+ hitDoc.toString());
+            query = parser.parse(wordQuery);
+            ScoreDoc[] hits = indexSearcher.search(query, 1000).scoreDocs;
+            
+            if (hits.length == 0){
+                 System.out.println("[Search] No se han encontrado coincidencias.");
+            } else {
+                System.out.println("[Search] Se han encontrado: " + hits.length + " coincidencias.");
+                for (ScoreDoc hit : hits) {
+                    Document hitDoc = indexSearcher.doc(hit.doc);
+                    System.out.println("[Search] Resultado: " + hitDoc.toString());
+                }
+                indexReader.close();
             }
-            ireader.close();
+
         } catch (ParseException | IOException ex) {
             Logger.getLogger(Reader.class.getName()).log(Level.SEVERE, null, ex);
         }

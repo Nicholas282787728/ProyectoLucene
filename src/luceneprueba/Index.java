@@ -33,8 +33,10 @@ import org.json.simple.parser.ParseException;
 public class Index {
     private String path;
     private String indexName;
+    private String jsonFilePath;
     private final Directory directory;
     private final Analyzer analyzer = new StandardAnalyzer();
+    private final Analyzer indexAnalyzer = new StandardAnalyzer();
     
     public Index(String path, String indexName) throws IOException{
         this.path = path;
@@ -68,7 +70,7 @@ public class Index {
     
     public void create(){
         try{
-            // To store an index on disk, use this instead:
+            // Storing index in disk
             IndexWriterConfig config = new IndexWriterConfig(analyzer);
             IndexWriter iwriter = new IndexWriter(directory, config);
 
@@ -80,15 +82,17 @@ public class Index {
             String fileContent;
             JSONArray jsonArray;
             JSONParser jsonParser = new JSONParser();
+            
             for(File file : files){
                 if(file.isFile() && file.canRead() && file.getName().endsWith(".txt")){
-                    System.out.println("Indexando el archivo: "+file.getName());                   
+                    System.out.println("[Index]Indexando el archivo: "+file.getName());                   
                     
                     br = new BufferedReader(new FileReader(file));
                     fileContent = br.readLine();
                     jsonArray = (JSONArray) jsonParser.parse(fileContent);
                     Iterator i = jsonArray.iterator();
                     JSONObject json;
+                    
                     while(i.hasNext()){
                         json = (JSONObject) i.next();
                         doc = new Document();
