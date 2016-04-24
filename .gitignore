@@ -1,1 +1,7 @@
 /dist/
+/classes
+**/build
+/build.properties
+/.idea
+lucene/**/*.iml
+*.class
