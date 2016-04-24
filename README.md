@@ -10,3 +10,9 @@
 
 
 ## ¿Cómo funciona?
+
+
+## TODO LIST
+
+[] Add on index.
+[] Search on index.
