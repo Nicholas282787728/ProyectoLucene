@@ -4,4 +4,13 @@
 /build.properties
 /.idea
 lucene/**/*.iml
+/files/indice_invertido
+
+target
+docs
+index
+
 *.class
+.classpath
+.project
+.settings
