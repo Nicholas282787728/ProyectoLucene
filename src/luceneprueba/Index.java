@@ -99,17 +99,16 @@ public class Index {
                         br = new BufferedReader(new FileReader(file));
                         fileContent = br.readLine();
                         jsonArray = (JSONArray) jsonParser.parse(fileContent);
-                        System.out.println("llega aqui?");
                         Iterator i = jsonArray.iterator();
-                        System.out.println("se comienza a iterar sobre el array de json");
                         while(i.hasNext()){
                             JSONObject json = (JSONObject) i.next();
                             doc = new Document();
+                            doc.add(new TextField("movieId", file.getName().split(".txt")[0], Field.Store.YES));
+                            doc.add(new TextField("path", file.toString(), Field.Store.YES));
                             doc.add(new TextField("title", (String) json.get("Title"), Field.Store.YES));
                             doc.add(new TextField("score", (String) json.get("Score"), Field.Store.YES));
                             doc.add(new TextField("review", (String) json.get("Review"), Field.Store.YES));
                             doc.add(new TextField("date", (String) json.get("Date"), Field.Store.YES));
-                            System.out.println("se agrega "+json.get("Title")+" al indice");
                             iwriter.addDocument(doc);
                         }
                         br.close();

@@ -59,9 +59,11 @@ public class Reader {
                  System.out.println("[Search] No se han encontrado coincidencias.");
             } else {
                 System.out.println("[Search] Se han encontrado: " + hits.length + " coincidencias.");
+                int i = 1;
                 for (ScoreDoc hit : hits) {
                     Document hitDoc = indexSearcher.doc(hit.doc);
-                    System.out.println("[Search] Resultado: " + hitDoc.toString());
+                    System.out.println(i+".- Score: " + hit.score + ", Doc: " + hitDoc.get("movieId") + ", path: " + hitDoc.get("path") + ", Tile review: " + hitDoc.get("title"));
+                    i++;
                 }
                 indexReader.close();
             }
