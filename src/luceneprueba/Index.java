@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.FileSystems;
+import java.util.Arrays;
 import java.util.Iterator;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -70,39 +71,49 @@ public class Index {
         try{
             // To store an index on disk, use this instead:
             IndexWriterConfig config = new IndexWriterConfig(analyzer);
-            IndexWriter iwriter = new IndexWriter(directory, config);
-
-            Document doc;
-            File dir = new File("files/input");
-            File[] files = dir.listFiles();
-            
-            BufferedReader br;
-            String fileContent;
-            JSONArray jsonArray;
-            JSONParser jsonParser = new JSONParser();
-            for(File file : files){
-                if(file.isFile() && file.canRead() && file.getName().endsWith(".txt")){
-                    System.out.println("Indexando el archivo: "+file.getName());                   
-                    
-                    br = new BufferedReader(new FileReader(file));
-                    fileContent = br.readLine();
-                    jsonArray = (JSONArray) jsonParser.parse(fileContent);
-                    Iterator i = jsonArray.iterator();
-                    JSONObject json;
-                    while(i.hasNext()){
-                        json = (JSONObject) i.next();
-                        doc = new Document();
-                        doc.add(new TextField("title", (String) json.get("Title"), Field.Store.YES));
-                        doc.add(new TextField("score", (String) json.get("Score"), Field.Store.YES));
-                        doc.add(new TextField("review", (String) json.get("Review"), Field.Store.YES));
-                        doc.add(new TextField("date", (String) json.get("Date"), Field.Store.YES));
-                        iwriter.addDocument(doc);
-                    }  
-                    iwriter.close();
-                    //doc.add(new StringField("path", file.getPath(), Field.Store.YES));
-                    //doc.add(new Textfield("content"))
+            try (IndexWriter iwriter = new IndexWriter(directory, config)) {
+                Document doc;
+                File dir = new File("files/input");
+                File[] files = dir.listFiles();
+                
+                if(files == null){
+                    System.out.println("No existe la carpeta \'input\' dentro de la carpeta files.");
+                    return;
                 }
-            }                
+                
+                if(files.length == 0){
+                    System.out.println("No hay ningun archivo en la carpeta \'input\' para ser indexado");
+                    return;
+                }
+                
+                BufferedReader br;
+                String fileContent;
+                JSONArray jsonArray;
+                JSONParser jsonParser = new JSONParser();
+                for(File file : files){
+                    if(file.isFile() && file.canRead() && file.getName().endsWith(".txt")){
+                        System.out.println("Indexando el archivo: "+file.getName());
+                        
+                        br = new BufferedReader(new FileReader(file));
+                        fileContent = br.readLine();
+                        jsonArray = (JSONArray) jsonParser.parse(fileContent);
+                        Iterator i = jsonArray.iterator();
+                        JSONObject json;
+                        System.out.println("se comienza a iterar sobre el array de json");
+                        while(i.hasNext()){
+                            json = (JSONObject) i.next();
+                            doc = new Document();
+                            doc.add(new TextField("title", (String) json.get("Title"), Field.Store.YES));
+                            doc.add(new TextField("score", (String) json.get("Score"), Field.Store.YES));
+                            doc.add(new TextField("review", (String) json.get("Review"), Field.Store.YES));
+                            doc.add(new TextField("date", (String) json.get("Date"), Field.Store.YES));
+                            System.out.println("se agrega "+json.get("Title")+" al indice");
+                            iwriter.addDocument(doc);
+                        }
+                        br.close();
+                    }
+                }
+            }
         }
         catch(IOException | ParseException e){
             System.out.println(e.getLocalizedMessage());
