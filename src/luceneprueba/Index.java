@@ -12,11 +12,11 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.util.Arrays;
 import java.util.Iterator;
+
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
+//import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -27,6 +27,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import luceneprueba.CustomAnalyzers.ReviewAnalyzer;
 /**
  *
  * @author JAno
@@ -34,8 +35,11 @@ import org.json.simple.parser.ParseException;
 public class Index {
     private String path;
     private String indexName;
+    private String jsonFilePath;
     private final Directory directory;
-    private final Analyzer analyzer = new StandardAnalyzer();
+    private final Analyzer analyzer = new ReviewAnalyzer();
+    //private final Analyzer analyzer = new StandardAnalyzer();
+    //private final Analyzer indexAnalyzer = new StandardAnalyzer();
     
     public Index(String path, String indexName) throws IOException{
         this.path = path;
@@ -69,7 +73,7 @@ public class Index {
     
     public void create(){
         try{
-            // To store an index on disk, use this instead:
+            // Storing index in disk
             IndexWriterConfig config = new IndexWriterConfig(analyzer);
             try (IndexWriter iwriter = new IndexWriter(directory, config)) {
                 Document doc;

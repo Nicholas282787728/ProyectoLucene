@@ -27,6 +27,8 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.SimpleFSDirectory;
 
+import luceneprueba.utils.Menu;
+
 public class LucenePrueba {
 
     public static void main(String[] args) throws IOException {
@@ -34,14 +36,7 @@ public class LucenePrueba {
             int opcion;
             Index index = new Index("files/", "indice_invertido");                        
             do{
-                System.out.flush();
-                System.out.println("Opciones:");
-                System.out.println("1. Crear índice invertido");
-                System.out.println("2. Buscar en el índice invertido");
-                System.out.println("3. Salir");
-                System.out.print("Elija una opción: ");
-                //BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-                //opcion = br.;
+                Menu.printMainMenu();
                 Scanner in = new Scanner(System.in);
                 opcion = in.nextInt();
                 
@@ -61,8 +56,7 @@ public class LucenePrueba {
                         System.out.println("Opción inválida");
                         break;
                 }
-            }
-            while(opcion != 3);
+            } while(opcion != 3);
             
             index.getDirectory().close();
             
