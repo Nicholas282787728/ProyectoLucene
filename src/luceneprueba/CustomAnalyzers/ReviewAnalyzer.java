@@ -32,20 +32,20 @@ public class ReviewAnalyzer extends StopwordAnalyzerBase {
     public static final CharArraySet STOP_WORDS_SET = StopAnalyzer.ENGLISH_STOP_WORDS_SET;
     private int maxTokenLength = DEFAULT_MAX_TOKEN_LENGTH;
 
-     /** Builds an analyzer with the default stop words ({@link #STOP_WORDS_SET}).
-   */
+ /** 
+  * Construye un analizador con una lista por default de stop words.
+  * */
   public ReviewAnalyzer() {
     this(STOP_WORDS_SET);
   }
     
   /** Constructor del analizar con una lista de stopwords.
-   * @param stopWords stop words */
+   * @param stopWords lista de stop words stop words */
     public ReviewAnalyzer(CharArraySet stopWords) {
         super(stopWords);
     }
- /** Builds an analyzer with the stop words from the given reader.
-   * @see WordlistLoader#getWordSet(Reader)
-   * @param stopwords Reader to read stop words from */   
+ /** Construir un analyzer con una lista de palabras obtenidas de un stop words.
+   * @param stopwords Leer palabras de una lista de stopwords */   
     public ReviewAnalyzer(Reader stopwords) throws IOException {
         this(loadStopwordSet(stopwords));
     }

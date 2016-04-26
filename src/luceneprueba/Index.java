@@ -14,7 +14,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 import org.apache.lucene.analysis.Analyzer;
-//import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
@@ -38,8 +37,7 @@ public class Index {
     private String jsonFilePath;
     private final Directory directory;
     private final Analyzer analyzer = new ReviewAnalyzer();
-    //private final Analyzer analyzer = new StandardAnalyzer();
-    //private final Analyzer indexAnalyzer = new StandardAnalyzer();
+
     
     public Index(String path, String indexName) throws IOException{
         this.path = path;
