@@ -101,11 +101,11 @@ public class Index {
                         br = new BufferedReader(new FileReader(file));
                         fileContent = br.readLine();
                         jsonArray = (JSONArray) jsonParser.parse(fileContent);
+                        System.out.println("llega aqui?");
                         Iterator i = jsonArray.iterator();
-                        JSONObject json;
                         System.out.println("se comienza a iterar sobre el array de json");
                         while(i.hasNext()){
-                            json = (JSONObject) i.next();
+                            JSONObject json = (JSONObject) i.next();
                             doc = new Document();
                             doc.add(new TextField("title", (String) json.get("Title"), Field.Store.YES));
                             doc.add(new TextField("score", (String) json.get("Score"), Field.Store.YES));
@@ -117,10 +117,11 @@ public class Index {
                         br.close();
                     }
                 }
+                iwriter.close();
             }
         }
         catch(IOException | ParseException e){
-            System.out.println(e.getLocalizedMessage());
+            e.printStackTrace();
         }
     }
     
