@@ -5,6 +5,8 @@
  */
 package luceneprueba;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
@@ -90,37 +92,44 @@ public class Reader {
         
     }
     
-    public void searchOnIndex(String date){
+    public void searchOnIndex(){
         // Parse a simple query that searches for "text":
         QueryParser parser = new QueryParser("review", analyzer);
         Query query;
         try {
-            query = parser.parse("date: \"+" + date + "\"");
-            ScoreDoc[] hits = indexSearcher.search(query, 1).scoreDocs;
+            BufferedReader br = new BufferedReader(new FileReader("files/dates_reviews"));
+            String date;
             
-            if (hits.length == 0){
-                 System.out.println("[Search] No se han encontrado coincidencias.");
-            } else {
-                System.out.println("[Search] Se han encontrado: " + hits.length + " coincidencias.");
-                int i = 1;
-                JSONArray reviews = new JSONArray();
-                for (ScoreDoc hit : hits) {
-                    Document hitDoc = indexSearcher.doc(hit.doc);
-                    //System.out.println(i+".- Score: " + hit.score + ", Doc: " + hitDoc.get("movieId") + ", path: " + hitDoc.get("path") + ", Tile review: " + hitDoc.get("title"));
+            JSONArray reviews = new JSONArray();
+            
+            while ((date = br.readLine()) != null) {
+                query = parser.parse("date: \"+" + date + "\"");
+                ScoreDoc[] hits = indexSearcher.search(query, 1).scoreDocs;
+
+                if (hits.length == 0){
+                    System.out.println("No se encontraron reviews para la fecha " + date);
+                }
+                else{
+                    System.out.println("Guardando review de la fecha " + date);
+                    Document hitDoc = indexSearcher.doc(hits[0].doc);
+
                     JSONObject json = new JSONObject();
                     json.put("date", hitDoc.get("date"));
-                    json.put("genre", hitDoc.get("genre"));
+                    //json.put("genre", hitDoc.get("genre"));
                     json.put("review", hitDoc.get("review"));
-                    json.put("score", hitDoc.get("score"));
+                    //json.put("score", hitDoc.get("score"));
                     reviews.add(json);
-                    i++;
+
+                    
                 }
-                FileWriter file = new FileWriter("files/output/review_date.json");
+            }
+            
+            try (FileWriter file = new FileWriter("files/output/review_date.json")) {
                 file.write(reviews.toJSONString());
                 file.flush();
-                file.close();
-                indexReader.close();
             }
+            indexReader.close();
+            
 
         } catch (ParseException | IOException ex) {
             Logger.getLogger(Reader.class.getName()).log(Level.SEVERE, null, ex);

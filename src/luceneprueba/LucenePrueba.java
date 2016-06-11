@@ -57,10 +57,7 @@ public class LucenePrueba {
                         break;
                     case 3:
                         Reader reader_date = new Reader(index.getDirectory(), index.getAnalyzer());
-                        System.out.print("Ingrese la fecha: ");
-                        Scanner query_date = new Scanner(System.in);
-                        String date = query_date.nextLine();
-                        reader_date.searchOnIndex(date);
+                        reader_date.searchOnIndex();
                         break;
                     case 4:                        
                         break;
@@ -68,7 +65,8 @@ public class LucenePrueba {
                         System.out.println("Opción inválida");
                         break;
                 }
-            } while(opcion != 3);
+                System.out.print("\n\n\n\n");
+            } while(opcion != 4);
             
             index.getDirectory().close();
             
