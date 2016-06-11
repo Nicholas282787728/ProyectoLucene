@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.FileSystems;
+import java.util.Arrays;
 import java.util.Scanner;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -48,7 +49,11 @@ public class LucenePrueba {
                     case 2:
                         Reader reader = new Reader(index.getDirectory(), index.getAnalyzer());
                         System.out.print("Ingrese la palabra a buscar: ");
-                        reader.searchOnIndex(in.next());
+                        Scanner query = new Scanner(System.in);
+                        String queryReview = query.nextLine();
+                        System.out.println("Ingrese la fecha: ");
+                        String queryDate = query.nextLine();
+                        reader.searchOnIndex(queryReview, queryDate);
                         break;
                     case 3:
                         break;
@@ -62,7 +67,7 @@ public class LucenePrueba {
             
         }
         catch(Exception e){
-            System.out.println(e);
+            System.out.println(Arrays.toString(e.getStackTrace()));
         }        
     }
     

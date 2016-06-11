@@ -109,6 +109,8 @@ public class Index {
                             doc.add(new TextField("score", (String) json.get("Score"), Field.Store.YES));
                             doc.add(new TextField("review", (String) json.get("Review"), Field.Store.YES));
                             doc.add(new TextField("date", (String) json.get("Date"), Field.Store.YES));
+                            doc.add(new TextField("genre", (String) json.get("Genre"), Field.Store.YES));
+                            doc.add(new TextField("score", (String) json.get("Score"), Field.Store.YES));
                             iwriter.addDocument(doc);
                         }
                         br.close();
