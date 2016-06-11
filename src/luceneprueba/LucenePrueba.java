@@ -51,11 +51,18 @@ public class LucenePrueba {
                         System.out.print("Ingrese la palabra a buscar: ");
                         Scanner query = new Scanner(System.in);
                         String queryReview = query.nextLine();
-                        System.out.println("Ingrese la fecha: ");
+                        System.out.print("Ingrese la fecha: ");
                         String queryDate = query.nextLine();
                         reader.searchOnIndex(queryReview, queryDate);
                         break;
                     case 3:
+                        Reader reader_date = new Reader(index.getDirectory(), index.getAnalyzer());
+                        System.out.print("Ingrese la fecha: ");
+                        Scanner query_date = new Scanner(System.in);
+                        String date = query_date.nextLine();
+                        reader_date.searchOnIndex(date);
+                        break;
+                    case 4:                        
                         break;
                     default:
                         System.out.println("Opción inválida");

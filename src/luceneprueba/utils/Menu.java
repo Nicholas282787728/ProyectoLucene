@@ -16,7 +16,8 @@ public class Menu {
         System.out.println("Opciones:");
         System.out.println("1. Crear índice invertido");
         System.out.println("2. Buscar en el índice invertido");
-        System.out.println("3. Salir");
+        System.out.println("3. Buscar por fecha");
+        System.out.println("4. Salir");
         System.out.print("Elija una opción: ");
     }
  
