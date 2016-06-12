@@ -6,10 +6,12 @@
 package luceneprueba;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.lucene.analysis.Analyzer;
@@ -23,6 +25,7 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.store.Directory;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 /**
  *
@@ -48,24 +51,33 @@ public class Reader {
         return indexSearcher;
     }
     
-    /* // TODO: Fix setAnalyzer
-    public setAnalyzer(Analyzer analyzer) {
-        this.analyzer = analyzer;
+    public String cleanInput(String input){
+        String clean = input.replace("/", " ");
+        clean = clean.replace("(", "");
+        clean = clean.replace(")", "");
+        clean = clean.replace("'", "");
+        clean = clean.replace("!", "");
+        clean = clean.replace("*", "");
+        clean = clean.replace("?", "");
+        clean = clean.replace("-", "");
+        clean = clean.replace("^", "");
+        clean = clean.replace("~", "");
+        return clean;
     }
-    */
+    
     public void searchOnIndex(String wordQuery, String date){
         // Parse a simple query that searches for "text":
         QueryParser parser = new QueryParser("review", analyzer);
         Query query;
         try {
-            query = parser.parse("date: \"+" + date + "\" AND " + wordQuery);
+            query = parser.parse("date: \"+" + date + "\" AND " + cleanInput(wordQuery));
             ScoreDoc[] hits = indexSearcher.search(query, 60).scoreDocs;
             
             if (hits.length == 0){
                  System.out.println("[Search] No se han encontrado coincidencias.");
-            } else {
+            } 
+            else {
                 System.out.println("[Search] Se han encontrado: " + hits.length + " coincidencias.");
-                int i = 1;
                 JSONArray reviews = new JSONArray();
                 for (ScoreDoc hit : hits) {
                     Document hitDoc = indexSearcher.doc(hit.doc);
@@ -76,20 +88,49 @@ public class Reader {
                     json.put("review", hitDoc.get("review"));
                     json.put("score", hitDoc.get("score"));
                     reviews.add(json);
-                    i++;
                 }
-                FileWriter file = new FileWriter("files/output/reviews_" + date.replace(" ", "") + ".json");
-                file.write(reviews.toJSONString());
-                file.flush();
-                file.close();
-                indexReader.close();
+                try (FileWriter file = new FileWriter("files/output/top-k/reviews_" + date.replace(" ", "") + ".json")) {
+                    file.write(reviews.toJSONString());
+                    file.flush();
+                    //indexReader.close();
+                }
             }
 
         } catch (ParseException | IOException ex) {
             Logger.getLogger(Reader.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println(Arrays.toString(ex.getStackTrace()));
+            for(StackTraceElement st : ex.getStackTrace()){
+                System.out.println(st.toString());
+            }
+            System.out.println(ex.getLocalizedMessage());
         }
         
+    }
+    
+    public void retriveReviewsByDate(){
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("files/output/review_date.json"));
+            JSONParser parser = new JSONParser();
+            JSONArray datesReviews = (JSONArray) parser.parse(br.readLine());
+            Iterator i = datesReviews.iterator();
+            while(i.hasNext()){
+                JSONObject json = (JSONObject) i.next();
+                System.out.println("Recuperando los top-60 reviews del día " + (String) json.get("date"));
+                searchOnIndex((String) json.get("review"), (String) json.get("date"));
+            }
+            br.close();
+            indexReader.close();
+            
+        } catch (FileNotFoundException | org.json.simple.parser.ParseException ex) {
+            for(StackTraceElement st : ex.getStackTrace()){
+                System.out.println(st.toString());
+            }
+            System.out.println(ex.getLocalizedMessage());
+        } catch (IOException ex) {
+            for(StackTraceElement st : ex.getStackTrace()){
+                System.out.println(st.toString());
+            }
+            System.out.println(ex.getLocalizedMessage());
+        }
     }
     
     public void searchOnIndex(){
@@ -133,7 +174,10 @@ public class Reader {
 
         } catch (ParseException | IOException ex) {
             Logger.getLogger(Reader.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println(Arrays.toString(ex.getStackTrace()));
+            for(StackTraceElement st : ex.getStackTrace()){
+                System.out.println(st.toString());
+            }
+            System.out.println(ex.getLocalizedMessage());
         }
         
     }

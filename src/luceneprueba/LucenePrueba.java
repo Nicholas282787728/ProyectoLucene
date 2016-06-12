@@ -59,20 +59,27 @@ public class LucenePrueba {
                         Reader reader_date = new Reader(index.getDirectory(), index.getAnalyzer());
                         reader_date.searchOnIndex();
                         break;
-                    case 4:                        
+                    case 4:    
+                        Reader retriveReviews = new Reader(index.getDirectory(), index.getAnalyzer());
+                        retriveReviews.retriveReviewsByDate();
+                        break;
+                    case 5:
                         break;
                     default:
                         System.out.println("Opción inválida");
                         break;
                 }
                 System.out.print("\n\n\n\n");
-            } while(opcion != 4);
+            } while(opcion != 5);
             
             index.getDirectory().close();
             
         }
-        catch(Exception e){
-            System.out.println(Arrays.toString(e.getStackTrace()));
+        catch(Exception ex){
+            for(StackTraceElement st : ex.getStackTrace()){
+                System.out.println(st.toString());
+            }
+            System.out.println(ex.getLocalizedMessage());
         }        
     }
     

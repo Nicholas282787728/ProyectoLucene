@@ -17,7 +17,8 @@ public class Menu {
         System.out.println("1. Crear índice invertido");
         System.out.println("2. Buscar en el índice invertido");
         System.out.println("3. Obtener reviews por fecha desde un archivo");
-        System.out.println("4. Salir");
+        System.out.println("4. Obtener los top-60 reviews por cada día");
+        System.out.println("5. Salir");
         System.out.print("Elija una opción: ");
     }
  
