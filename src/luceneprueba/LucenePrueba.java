@@ -29,6 +29,7 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.SimpleFSDirectory;
 
 import luceneprueba.utils.Menu;
+import luceneprueba.utils.FileParser;
 
 public class LucenePrueba {
 
@@ -64,13 +65,16 @@ public class LucenePrueba {
                         retriveReviews.retriveReviewsByDate();
                         break;
                     case 5:
+                        FileParser.createFilesFromJSONArray();
+                        break;
+                    case 6:
                         break;
                     default:
                         System.out.println("Opción inválida");
                         break;
                 }
                 System.out.print("\n\n\n\n");
-            } while(opcion != 5);
+            } while(opcion != 6);
             
             index.getDirectory().close();
             
