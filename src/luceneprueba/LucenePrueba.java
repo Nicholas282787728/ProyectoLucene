@@ -31,6 +31,7 @@ import org.apache.lucene.store.SimpleFSDirectory;
 import luceneprueba.utils.Menu;
 import luceneprueba.utils.FileParser;
 import luceneprueba.utils.Review;
+import simemisorreceptor.SimEmisorReceptor;
 
 public class LucenePrueba {
 
@@ -70,8 +71,9 @@ public class LucenePrueba {
                         FileParser.createFilesFromJSONArray();
                         break;
                     case 6:
-                        nullReview.getListForTxt();
-                        break;
+                        //nullReview.getListForTxt();
+                        SimEmisorReceptor.main(nullReview.getListForTxt());
+                        break;    
                     case 7:
                         break;
                     default:
@@ -79,7 +81,7 @@ public class LucenePrueba {
                         break;
                 }
                 System.out.print("\n\n\n\n");
-            } while(opcion != 7);
+            } while(opcion != opcion);
             
             index.getDirectory().close();
             

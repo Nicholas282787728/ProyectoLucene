@@ -8,6 +8,8 @@ package simemisorreceptor;
 import cz.zcu.fav.kiv.jsim.JSimException;
 import cz.zcu.fav.kiv.jsim.JSimSimulation;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessageBox;
+import java.util.List;
+import luceneprueba.utils.Review;
 
 
 /**
@@ -39,7 +41,10 @@ public class SimEmisorReceptor {
         return 1;
     }
     
-    public static void main(String[] args) {
+    public static void main(List<Review> reviews) {
+        
+        
+        
         JSimSimulation simulation = null;
         JSimMessageBox box = null;
         Emisor sender;
@@ -72,6 +77,8 @@ public class SimEmisorReceptor {
         try
         {
                 System.out.println("Inicializando parametros de simulación...");
+                System.out.println("Total de reviews: " + reviews.size());
+                //System.exit(1);
                 simulation = new JSimSimulation("Asynchronous Indirect Communication Simulation");
                 box = new JSimMessageBox("Shared Message Box");
                 sender = new Emisor("Emisor", simulation, box);
