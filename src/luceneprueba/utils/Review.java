@@ -170,12 +170,24 @@ public class Review {
                 System.out.println("Guardando la linea: " + datos);
                 String [] datosParser = datos.split("_");
                 if(datosParser.length == 4){
-                    //System.out.println(datosParser[0]+"_"+convertDate(datosParser[1])+"_"+Arrays.toString(datosParser[2].split(", "))+"_"+convertScore(datosParser[3]));
-                    reviews.add(new Review(Integer.parseInt(datosParser[0]), convertDate(datosParser[1]), convertScore(datosParser[3]), datosParser[2].split(", ")));
+                   
+                    reviews.add(new Review(Integer.parseInt(datosParser[0]), 
+                                          convertDate(datosParser[1]), 
+                                          convertScore(datosParser[3]), 
+                                          datosParser[2].split(", ")
+                                          )
+                                );
+                
+                
                 }
                 else{
-                    //System.out.println(datosParser[0]+"_"+convertDate(datosParser[1])+"_"+Arrays.toString(datosParser[2].split(", "))+"_"+0.0);
-                    reviews.add(new Review(Integer.parseInt(datosParser[0]), convertDate(datosParser[1]), 0.0, datosParser[2].split(", ")));
+                    
+                    reviews.add(new Review(Integer.parseInt(datosParser[0]), 
+                                           convertDate(datosParser[1]), 
+                                           0.0,
+                                           datosParser[2].split(", ")
+                                           )
+                                );
                 }
             }
         } catch (FileNotFoundException ex) {
@@ -239,5 +251,9 @@ public class Review {
         });
         return reviews;
     }
+    
+    //public double[] getArrayClasificadores(String linea) {
+    //    double[] arrayClasificadores;
+    //}
     
 }
