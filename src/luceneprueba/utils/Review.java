@@ -165,29 +165,39 @@ public class Review {
         
         try {
             BufferedReader br = new BufferedReader(new FileReader("files/output/datos_reviews.txt"));
+            BufferedReader brActorClassificator = new BufferedReader(new FileReader("files/output/clasificador_actor.txt"));
+            BufferedReader brMovieClassificator = new BufferedReader(new FileReader("files/output/clasificador_pelicula.txt"));            
             String datos;
+            
             while ((datos = br.readLine()) != null) {
                 System.out.println("Guardando la linea: " + datos);
+                String datosClasificadorActor=brActorClassificator.readLine();
+                String datosClasificadorMovie=brMovieClassificator.readLine();
+                                
                 String [] datosParser = datos.split("_");
+                //String [] datosParserClasificadorActor = datosClasificadorActor.split(" ");
+               // String [] datoParserClasificadorMovie = datosClasificadorMovie.split(" ");
+                              
+                
                 if(datosParser.length == 4){
-                   
-                    reviews.add(new Review(Integer.parseInt(datosParser[0]), 
-                                          convertDate(datosParser[1]), 
-                                          convertScore(datosParser[3]), 
-                                          datosParser[2].split(", ")
-                                          )
-                                );
-                
-                
-                }
-                else{
-                    
+                    //System.out.println(datosParser[0]+"_"+convertDate(datosParser[1])+"_"+Arrays.toString(datosParser[2].split(", "))+"_"+convertScore(datosParser[3]));
                     reviews.add(new Review(Integer.parseInt(datosParser[0]), 
                                            convertDate(datosParser[1]), 
-                                           0.0,
-                                           datosParser[2].split(", ")
-                                           )
-                                );
+                                           convertScore(datosParser[3]), 
+                                           datosParser[2].split(", "), 
+                                           createArrayClasificador(datosClasificadorActor), 
+                                           createArrayClasificador(datosClasificadorMovie)
+                                           ));
+                }
+                else{
+                    //System.out.println(datosParser[0]+"_"+convertDate(datosParser[1])+"_"+Arrays.toString(datosParser[2].split(", "))+"_"+0.0);
+                    reviews.add(new Review(Integer.parseInt(datosParser[0]), 
+                                           convertDate(datosParser[1]), 
+                                           0.0, 
+                                           datosParser[2].split(", "), 
+                                           createArrayClasificador(datosClasificadorActor), 
+                                           createArrayClasificador(datosClasificadorMovie)
+                            ));
                 }
             }
         } catch (FileNotFoundException ex) {
@@ -196,6 +206,12 @@ public class Review {
             ex.printStackTrace(System.out);
         }
         System.out.println("Largo de la lista de reviews: "+reviews.size());
+        
+        // print review object array
+        for (Review review : reviews) {
+            System.out.println(review.getId() + " " + Arrays.toString(review.getClasificador1()));
+        }
+        
         return reviews;
     }
     
@@ -252,8 +268,21 @@ public class Review {
         return reviews;
     }
     
-    //public double[] getArrayClasificadores(String linea) {
-    //    double[] arrayClasificadores;
-    //}
+    public double[] createArrayClasificador(String linea) {
+        double[] arrayClasificador = new double[3];
+        String [] lineaSplit = linea.split(" ");
+        // [0] = neg, [1] = pos, [2]= unsup
+        //System.out.println("linea split 2 clasificador" + " " + lineaSplit[2] + " " + lineaSplit[2]);
+        arrayClasificador[0] = Double.parseDouble(lineaSplit[2]);
+        arrayClasificador[1] = Double.parseDouble(lineaSplit[4]); 
+        arrayClasificador[2] = Double.parseDouble(lineaSplit[6]);
+        
+        return  arrayClasificador;
+    }
+    
+    public double convertStringToDouble(String number) { 
+        double value = Double.parseDouble(number);
+        return value;
+    }
     
 }

@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -56,22 +57,23 @@ public class FileParser {
             if(file.isFile() && file.canRead() && file.getName().endsWith(".txt")){
                 System.out.println("Leyendo el archivo: "+file.getName());
                 FileWriter contentReviews;
-                try {
-                    contentReviews = new FileWriter("files/output/clasificador/review_clasificador_"+ i +".txt");                
+                try {               
                     br = new BufferedReader(new FileReader(file));
                     fileContent = br.readLine();
                     jsonArray = (JSONArray) jsonParser.parse(fileContent);
                     Iterator it = jsonArray.iterator();
+                    DecimalFormat formato = new DecimalFormat("000000");
                     while(it.hasNext()){
                         JSONObject json = (JSONObject) it.next();
-                        if(json.get("Genre") != null && json.get("Date") != null){
+                        if(json.get("Genre") != null && json.get("Date") != null){                          
+                            contentReviews = new FileWriter("files/output/clasificador/review_clasificador_"+ formato.format(i) +".txt"); 
                             datosReviews.write(Integer.toString(i)+"_"+ (String) json.get("Date")+"_"+ (String) json.get("Genre")+"_"+ (String) json.get("Score")+"\n");
-                            contentReviews.write(Integer.toString(i)+" "+ (String) json.get("Review")+"\n");
+                            contentReviews.write(Integer.toString(i)+" "+ (String) json.get("Review"));
                             i++;
+                            contentReviews.close();
                         }
                     }
                     br.close();
-                    contentReviews.close();
                 } catch (FileNotFoundException ex) {
                     ex.printStackTrace(System.out);
                 } catch (IOException | ParseException ex) {

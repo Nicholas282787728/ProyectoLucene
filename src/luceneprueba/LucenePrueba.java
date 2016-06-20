@@ -36,7 +36,7 @@ import simemisorreceptor.SimEmisorReceptor;
 public class LucenePrueba {
 
     public static void main(String[] args) throws IOException {
-        try{
+        try{           
             int opcion;
             Index index = new Index("files/", "indice_invertido");
             Review nullReview = new Review();
