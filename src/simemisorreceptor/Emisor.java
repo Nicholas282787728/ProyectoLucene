@@ -54,9 +54,9 @@ public class Emisor  extends JSimProcess
 
 	// ------------------------------------------------------------------------------------------------------------------------------------
 
-        List<Review> reviews;
+        List<List<Review>> reviews;
         
-	public Emisor(String name, JSimSimulation parent, JSimMessageBox messageBox, List<Review> reviews) throws JSimSimulationAlreadyTerminatedException, JSimInvalidParametersException, JSimTooManyProcessesException
+	public Emisor(String name, JSimSimulation parent, JSimMessageBox messageBox, List<List<Review>> reviews) throws JSimSimulationAlreadyTerminatedException, JSimInvalidParametersException, JSimTooManyProcessesException
 	{
 		super(name, parent);
                 
@@ -240,11 +240,11 @@ public class Emisor  extends JSimProcess
         this.receiverT22 = receiverT22;
     }
 
-    public List<Review> getReviews() {
+    public List<List<Review>> getReviews() {
         return reviews;
     }
 
-    public void setReviews(List<Review> reviews) {
+    public void setReviews(List<List<Review>> reviews) {
         this.reviews = reviews;
     }
     
@@ -268,129 +268,131 @@ public class Emisor  extends JSimProcess
                 //leo todos los reviews de esta fecha
                 while (true)
                 {
-                    for(Review rHoydia : this.reviews){
+                    for(List<Review> r1Hoydia : this.reviews){
+                        
+                        for(Review rHoydia : r1Hoydia){
 
-                        SimEmisorReceptor.setTiempo(rHoydia.getFecha());
+                            SimEmisorReceptor.setTiempo(rHoydia.getFecha());
 
-                        //n-p-u >> clasificador 1 y 2
-                        //score
-                        for(String rHoy : rHoydia.getTopicos()){
-                            //mensaje para parsear
-                            String parsear;
-                            
-                            //System.out.println(rHoydia.getClasificador1().toString());
-                            
-                            //System.out.println(">>>"+rHoydia.getScore()+" "+rHoydia.getClasificador1()[0]+" "+rHoydia.getClasificador1()[1]+" "+rHoydia.getClasificador1()[2]+" "+rHoydia.getClasificador2()[0]+" "+rHoydia.getClasificador2()[1]+" "+rHoydia.getClasificador2()[2]);
-                            
-                            parsear = rHoydia.getScore()+" "+rHoydia.getClasificador1()[0]+" "+rHoydia.getClasificador1()[1]+" "+rHoydia.getClasificador1()[2]+" "+rHoydia.getClasificador2()[0]+" "+rHoydia.getClasificador2()[1]+" "+rHoydia.getClasificador2()[2];
-                            
-                            if(rHoy.equals("Action")){
-                                mensaje = new JSimMessageForReceiver(receiverT1, parsear);
-                                sendMessageWithoutBlocking(mensaje, box);
-                            }
-                            if(rHoy.equals("Adventure")){
-                                mensaje = new JSimMessageForReceiver(receiverT2, parsear);
-                                sendMessageWithoutBlocking(mensaje, box);
-                            }
-                            if(rHoy.equals("Animation")){
-                                mensaje = new JSimMessageForReceiver(receiverT3, parsear);
-                                sendMessageWithoutBlocking(mensaje, box);
-                            }
-                            if(rHoy.equals("Biography")){
-                                mensaje = new JSimMessageForReceiver(receiverT4, parsear);
-                                sendMessageWithoutBlocking(mensaje, box);
-                            }
-                            if(rHoy.equals("Comedy")){
-                                mensaje = new JSimMessageForReceiver(receiverT5, parsear);
-                                sendMessageWithoutBlocking(mensaje, box);
-                            }
-                            if(rHoy.equals("Crime")){
-                                mensaje = new JSimMessageForReceiver(receiverT6, parsear);
-                                sendMessageWithoutBlocking(mensaje, box);
-                            }
-                            if(rHoy.equals("Documentary")){
-                                mensaje = new JSimMessageForReceiver(receiverT7, parsear);
-                                sendMessageWithoutBlocking(mensaje, box);
-                            }
-                            if(rHoy.equals("Drama")){
-                                mensaje = new JSimMessageForReceiver(receiverT8, parsear);
-                                sendMessageWithoutBlocking(mensaje, box);
-                            }
-                            if(rHoy.equals("Family")){
-                                mensaje = new JSimMessageForReceiver(receiverT9, parsear);
-                                sendMessageWithoutBlocking(mensaje, box);
-                            }
-                            if(rHoy.equals("Fantasy")){
-                                mensaje = new JSimMessageForReceiver(receiverT10, parsear);
-                                sendMessageWithoutBlocking(mensaje, box);
-                            }
-                            if(rHoy.equals("FilmNoir")){
-                                mensaje = new JSimMessageForReceiver(receiverT11, parsear);
-                                sendMessageWithoutBlocking(mensaje, box);
-                            }
-                            if(rHoy.equals("History")){
-                                mensaje = new JSimMessageForReceiver(receiverT12, parsear);
-                                sendMessageWithoutBlocking(mensaje, box);
-                            }
-                            if(rHoy.equals("Horror")){
-                                mensaje = new JSimMessageForReceiver(receiverT13, parsear);
-                                sendMessageWithoutBlocking(mensaje, box);
-                            }
-                            if(rHoy.equals("Music")){
-                                mensaje = new JSimMessageForReceiver(receiverT14, parsear);
-                                sendMessageWithoutBlocking(mensaje, box);
-                            }
-                            if(rHoy.equals("Musical")){
-                                mensaje = new JSimMessageForReceiver(receiverT15, parsear);
-                                sendMessageWithoutBlocking(mensaje, box);
-                            }
-                            if(rHoy.equals("Mystery")){
-                                mensaje = new JSimMessageForReceiver(receiverT16, parsear);
-                                sendMessageWithoutBlocking(mensaje, box);
-                            }
-                            if(rHoy.equals("Romance")){
-                                mensaje = new JSimMessageForReceiver(receiverT17, parsear);
-                                sendMessageWithoutBlocking(mensaje, box);
-                            }
-                            if(rHoy.equals("SciFi")){
-                                mensaje = new JSimMessageForReceiver(receiverT18, parsear);
-                                sendMessageWithoutBlocking(mensaje, box);
-                            }
-                            if(rHoy.equals("Sport")){
-                                mensaje = new JSimMessageForReceiver(receiverT19, parsear);
-                                sendMessageWithoutBlocking(mensaje, box);
-                            }
-                            if(rHoy.equals("Thriller")){
-                                mensaje = new JSimMessageForReceiver(receiverT20, parsear);
-                                sendMessageWithoutBlocking(mensaje, box);
-                            }
-                            if(rHoy.equals("War")){
-                                mensaje = new JSimMessageForReceiver(receiverT21, parsear);
-                                sendMessageWithoutBlocking(mensaje, box);
-                            }
-                            if(rHoy.equals("Western")){
-                                mensaje = new JSimMessageForReceiver(receiverT22, parsear);
-                                sendMessageWithoutBlocking(mensaje, box);
-                            }
+                            //n-p-u >> clasificador 1 y 2
+                            //score
+                            for(String rHoy : rHoydia.getTopicos()){
+                                //mensaje para parsear
+                                String parsear;
 
-                            //mensaje = new JSimIndirectMessage(new String("(0.0,topico1,[1,0,0],[1,0,0])"));
-                            message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "> Enviando mensaje '" + mensaje.getData().toString() + "' a la caja de mensajes compartidos.");
+                                //System.out.println(rHoydia.getClasificador1().toString());
 
-                            //sendMessageWithBlocking(mensaje, box);
+                                //System.out.println(">>>"+rHoydia.getScore()+" "+rHoydia.getClasificador1()[0]+" "+rHoydia.getClasificador1()[1]+" "+rHoydia.getClasificador1()[2]+" "+rHoydia.getClasificador2()[0]+" "+rHoydia.getClasificador2()[1]+" "+rHoydia.getClasificador2()[2]);
 
-                            message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "> Mensaje enviado.");
+                                parsear = rHoydia.getScore()+" "+rHoydia.getClasificador1()[0]+" "+rHoydia.getClasificador1()[1]+" "+rHoydia.getClasificador1()[2]+" "+rHoydia.getClasificador2()[0]+" "+rHoydia.getClasificador2()[1]+" "+rHoydia.getClasificador2()[2];
+
+                                if(rHoy.equals("Action")){
+                                    mensaje = new JSimMessageForReceiver(receiverT1, parsear);
+                                    sendMessageWithoutBlocking(mensaje, box);
+                                }
+                                if(rHoy.equals("Adventure")){
+                                    mensaje = new JSimMessageForReceiver(receiverT2, parsear);
+                                    sendMessageWithoutBlocking(mensaje, box);
+                                }
+                                if(rHoy.equals("Animation")){
+                                    mensaje = new JSimMessageForReceiver(receiverT3, parsear);
+                                    sendMessageWithoutBlocking(mensaje, box);
+                                }
+                                if(rHoy.equals("Biography")){
+                                    mensaje = new JSimMessageForReceiver(receiverT4, parsear);
+                                    sendMessageWithoutBlocking(mensaje, box);
+                                }
+                                if(rHoy.equals("Comedy")){
+                                    mensaje = new JSimMessageForReceiver(receiverT5, parsear);
+                                    sendMessageWithoutBlocking(mensaje, box);
+                                }
+                                if(rHoy.equals("Crime")){
+                                    mensaje = new JSimMessageForReceiver(receiverT6, parsear);
+                                    sendMessageWithoutBlocking(mensaje, box);
+                                }
+                                if(rHoy.equals("Documentary")){
+                                    mensaje = new JSimMessageForReceiver(receiverT7, parsear);
+                                    sendMessageWithoutBlocking(mensaje, box);
+                                }
+                                if(rHoy.equals("Drama")){
+                                    mensaje = new JSimMessageForReceiver(receiverT8, parsear);
+                                    sendMessageWithoutBlocking(mensaje, box);
+                                }
+                                if(rHoy.equals("Family")){
+                                    mensaje = new JSimMessageForReceiver(receiverT9, parsear);
+                                    sendMessageWithoutBlocking(mensaje, box);
+                                }
+                                if(rHoy.equals("Fantasy")){
+                                    mensaje = new JSimMessageForReceiver(receiverT10, parsear);
+                                    sendMessageWithoutBlocking(mensaje, box);
+                                }
+                                if(rHoy.equals("FilmNoir")){
+                                    mensaje = new JSimMessageForReceiver(receiverT11, parsear);
+                                    sendMessageWithoutBlocking(mensaje, box);
+                                }
+                                if(rHoy.equals("History")){
+                                    mensaje = new JSimMessageForReceiver(receiverT12, parsear);
+                                    sendMessageWithoutBlocking(mensaje, box);
+                                }
+                                if(rHoy.equals("Horror")){
+                                    mensaje = new JSimMessageForReceiver(receiverT13, parsear);
+                                    sendMessageWithoutBlocking(mensaje, box);
+                                }
+                                if(rHoy.equals("Music")){
+                                    mensaje = new JSimMessageForReceiver(receiverT14, parsear);
+                                    sendMessageWithoutBlocking(mensaje, box);
+                                }
+                                if(rHoy.equals("Musical")){
+                                    mensaje = new JSimMessageForReceiver(receiverT15, parsear);
+                                    sendMessageWithoutBlocking(mensaje, box);
+                                }
+                                if(rHoy.equals("Mystery")){
+                                    mensaje = new JSimMessageForReceiver(receiverT16, parsear);
+                                    sendMessageWithoutBlocking(mensaje, box);
+                                }
+                                if(rHoy.equals("Romance")){
+                                    mensaje = new JSimMessageForReceiver(receiverT17, parsear);
+                                    sendMessageWithoutBlocking(mensaje, box);
+                                }
+                                if(rHoy.equals("SciFi")){
+                                    mensaje = new JSimMessageForReceiver(receiverT18, parsear);
+                                    sendMessageWithoutBlocking(mensaje, box);
+                                }
+                                if(rHoy.equals("Sport")){
+                                    mensaje = new JSimMessageForReceiver(receiverT19, parsear);
+                                    sendMessageWithoutBlocking(mensaje, box);
+                                }
+                                if(rHoy.equals("Thriller")){
+                                    mensaje = new JSimMessageForReceiver(receiverT20, parsear);
+                                    sendMessageWithoutBlocking(mensaje, box);
+                                }
+                                if(rHoy.equals("War")){
+                                    mensaje = new JSimMessageForReceiver(receiverT21, parsear);
+                                    sendMessageWithoutBlocking(mensaje, box);
+                                }
+                                if(rHoy.equals("Western")){
+                                    mensaje = new JSimMessageForReceiver(receiverT22, parsear);
+                                    sendMessageWithoutBlocking(mensaje, box);
+                                }
+
+                                //mensaje = new JSimIndirectMessage(new String("(0.0,topico1,[1,0,0],[1,0,0])"));
+                                message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "> Enviando mensaje '" + mensaje.getData().toString() + "' a la caja de mensajes compartidos.");
+
+                                //sendMessageWithBlocking(mensaje, box);
+
+                                message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "> Mensaje enviado.");
+                            }
+                        message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + ": hibernando por " + 1 + " día.");
+
+                        sleepTime = SimEmisorReceptor.getTiempo()+1;
+                        hold(1);
+                        i++;
+                        siguiente++;    
+
                         }
-                    message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + ": hibernando por " + 1 + " día.");
-                    
-                    sleepTime = SimEmisorReceptor.getTiempo()+1;
-                    hold(1);
-                    i++;
-                    siguiente++;    
-                    
-                    }
                     //tiempo++;
                     //sleepTime = JSimSystem.negExp(LAMBDA);
-                    
+                    } 
                 } // while
             } // try
             catch (JSimException e)

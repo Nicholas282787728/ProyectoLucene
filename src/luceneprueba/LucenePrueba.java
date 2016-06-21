@@ -73,7 +73,8 @@ public class LucenePrueba {
                         break;
                     case 6:
                         //nullReview.getListForTxt();
-                        SimEmisorReceptor.main(nullReview.getListForTxt());
+                        Reader retriveReviews2 = new Reader(index.getDirectory(), index.getAnalyzer());
+                        SimEmisorReceptor.main(retriveReviews2.retriveListReviewsByDate());
                         break;    
                     case 7:
                         break;
@@ -82,7 +83,7 @@ public class LucenePrueba {
                         break;
                 }
                 System.out.print("\n\n\n\n");
-            } while(opcion != 7);
+            } while(opcion != opcion);
             
             index.getDirectory().close();
             

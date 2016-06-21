@@ -182,9 +182,9 @@ public class Reader {
     public List<List<Review>> retriveListReviewsByDate(){
         List<List<Review>> reviews = new ArrayList();
         List<Review> reviewsByDate = getListFromSearchOnIndexByDate();
-        System.out.println("\n\n---- Cantidad de reviews recuperados por fecha: " + reviewsByDate.size() + "\n\n");
+        //System.out.println("\n\n---- Cantidad de reviews recuperados por fecha: " + reviewsByDate.size() + "\n\n");
         for(Review review : reviewsByDate){
-            System.out.println("Recuperando los top-60 reviews del día " + review.getFecha());
+            //System.out.println("Recuperando los top-60 reviews del día " + review.getFecha());
             reviews.add(getListBySearchOnIndex(review.getReview(), review.getFecha()+""));
         }
         
@@ -259,7 +259,7 @@ public class Reader {
                     System.out.println("No se encontraron reviews para la fecha " + date);
                 }
                 else{
-                    System.out.println("Guardando review de la fecha " + date);
+                    //System.out.println("Guardando review de la fecha " + date);
                     Document hitDoc = indexSearcher.doc(hits[0].doc);
 
                     String [] c1 = hitDoc.get("clasif1").split(", ");

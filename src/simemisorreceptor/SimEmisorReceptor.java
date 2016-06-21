@@ -178,7 +178,7 @@ public class SimEmisorReceptor {
         return valorRanking;
     }
     
-    public static void main(List<Review> reviews) {
+    public static void main(List<List<Review>> reviews) {
         
         
         
@@ -216,7 +216,7 @@ public class SimEmisorReceptor {
                 System.out.println("Inicializando parametros de simulación...");
                 //System.out.println("Total de reviews: " + reviews.size());
                 
-                setTiempo(reviews.get(0).getFecha());
+                setTiempo(reviews.get(0).get(0).getFecha());
                 
                 
                 //System.exit(1);
@@ -296,7 +296,7 @@ public class SimEmisorReceptor {
 
                 simulation.message("Comienza la simulación >>> ");
 
-                while ((simulation.getCurrentTime() < 100) && (simulation.step() == true))
+                while (simulation.step() == true)
                         ;
         } // try
         catch (JSimException e)
