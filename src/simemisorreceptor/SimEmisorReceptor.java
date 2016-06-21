@@ -77,11 +77,15 @@ public class SimEmisorReceptor {
         try
         {
                 System.out.println("Inicializando parametros de simulación...");
-                System.out.println("Total de reviews: " + reviews.size());
+                //System.out.println("Total de reviews: " + reviews.size());
+                
+                
+                
+                
                 //System.exit(1);
                 simulation = new JSimSimulation("Asynchronous Indirect Communication Simulation");
                 box = new JSimMessageBox("Shared Message Box");
-                sender = new Emisor("Emisor", simulation, box);
+                sender = new Emisor("Emisor", simulation, box, reviews);
                 receiverT1 = new Action("ReceptorT1", simulation, box,sender);
                 sender.setReceiverT1(receiverT1);
                 receiverT2 = new Adventure("ReceptorT2", simulation, box,sender);
@@ -155,7 +159,7 @@ public class SimEmisorReceptor {
 
                 simulation.message("Comienza la simulación >>> ");
 
-                while ((simulation.getCurrentTime() < 4) && (simulation.step() == true))
+                while ((simulation.getCurrentTime() < 100) && (simulation.step() == true))
                         ;
         } // try
         catch (JSimException e)
