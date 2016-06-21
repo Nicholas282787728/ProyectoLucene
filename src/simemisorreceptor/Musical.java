@@ -53,7 +53,9 @@ public class Musical extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        message("Ranking anterior: "+SimEmisorReceptor.formulaRanking(Musical));
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Musical)))
+                            message("Ranking anterior Musical: "+SimEmisorReceptor.formulaRanking(Musical));
+                        SimEmisorReceptor.setT15(SimEmisorReceptor.formulaRanking(Musical)+SimEmisorReceptor.getT15()-0.01);
                         
                         Musical = SimEmisorReceptor.objetoFecha(15, SimEmisorReceptor.getTiempo());
                     }

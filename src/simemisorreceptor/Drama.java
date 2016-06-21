@@ -54,7 +54,9 @@ public class Drama extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        message("Ranking anterior: "+SimEmisorReceptor.formulaRanking(Drama));
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Drama)))
+                            message("Ranking anterior Drama: "+SimEmisorReceptor.formulaRanking(Drama));
+                        SimEmisorReceptor.setT8(SimEmisorReceptor.formulaRanking(Drama)+SimEmisorReceptor.getT8()-0.01);
                         
                         Drama = SimEmisorReceptor.objetoFecha(8, SimEmisorReceptor.getTiempo());
                     }

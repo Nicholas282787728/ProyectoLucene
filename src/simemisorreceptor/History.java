@@ -53,7 +53,9 @@ public class History extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        message("Ranking anterior: "+SimEmisorReceptor.formulaRanking(History));
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(History)))
+                            message("Ranking anterior Historia: "+SimEmisorReceptor.formulaRanking(History));
+                        SimEmisorReceptor.setT12(SimEmisorReceptor.formulaRanking(History)+SimEmisorReceptor.getT12()-0.01);
                         
                         History = SimEmisorReceptor.objetoFecha(12, SimEmisorReceptor.getTiempo());
                     }

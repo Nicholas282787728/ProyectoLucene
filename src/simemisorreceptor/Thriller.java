@@ -52,7 +52,9 @@ public class Thriller extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        message("Ranking anterior: "+SimEmisorReceptor.formulaRanking(Thriller));
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Thriller)))
+                            message("Ranking anterior Thriller: "+SimEmisorReceptor.formulaRanking(Thriller));
+                        SimEmisorReceptor.setT20(SimEmisorReceptor.formulaRanking(Thriller)+SimEmisorReceptor.getT20()-0.01);
                         
                         Thriller = SimEmisorReceptor.objetoFecha(20, SimEmisorReceptor.getTiempo());
                     }

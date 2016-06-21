@@ -53,7 +53,9 @@ public class Fantasy extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        message("Ranking anterior: "+SimEmisorReceptor.formulaRanking(Fantasy));
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Fantasy)))
+                            message("Ranking anterior Fantasia: "+SimEmisorReceptor.formulaRanking(Fantasy));
+                        SimEmisorReceptor.setT10(SimEmisorReceptor.formulaRanking(Fantasy)+SimEmisorReceptor.getT10()-0.01);
                         
                         Fantasy = SimEmisorReceptor.objetoFecha(10, SimEmisorReceptor.getTiempo());
                     }

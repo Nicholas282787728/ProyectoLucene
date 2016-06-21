@@ -55,7 +55,9 @@ public class Comedy extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        message("Ranking anterior: "+SimEmisorReceptor.formulaRanking(Comedy));
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Comedy)))
+                            message("Ranking anterior Comedia: "+SimEmisorReceptor.formulaRanking(Comedy));
+                        SimEmisorReceptor.setT5(SimEmisorReceptor.formulaRanking(Comedy)+SimEmisorReceptor.getT5()-0.01);
                         
                         Comedy = SimEmisorReceptor.objetoFecha(5, SimEmisorReceptor.getTiempo());
                     }

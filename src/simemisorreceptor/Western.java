@@ -52,7 +52,9 @@ public class Western extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        message("Ranking anterior: "+SimEmisorReceptor.formulaRanking(Western));
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Western)))
+                            message("Ranking anterior Western: "+SimEmisorReceptor.formulaRanking(Western));
+                        SimEmisorReceptor.setT22(SimEmisorReceptor.formulaRanking(Western)+SimEmisorReceptor.getT22()-0.01);
                         
                         Western = SimEmisorReceptor.objetoFecha(22, SimEmisorReceptor.getTiempo());
                     }

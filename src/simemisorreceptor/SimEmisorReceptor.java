@@ -23,6 +23,205 @@ public class SimEmisorReceptor {
      */
     public static int tiempo = 19990418;
     public static int alpha = 2;
+    
+    public static double t1 = 0.0;
+    public static double t2 = 0.0;
+    public static double t3 = 0.0;
+    public static double t4 = 0.0;
+    public static double t5 = 0.0;
+    public static double t6 = 0.0;
+    public static double t7 = 0.0;
+    public static double t8 = 0.0;
+    public static double t9 = 0.0;
+    public static double t10 = 0.0;
+    public static double t11 = 0.0;
+    public static double t12 = 0.0;
+    public static double t13 = 0.0;
+    public static double t14 = 0.0;
+    public static double t15 = 0.0;
+    public static double t16 = 0.0;
+    public static double t17 = 0.0;
+    public static double t18 = 0.0;
+    public static double t19 = 0.0;
+    public static double t20 = 0.0;
+    public static double t21 = 0.0;
+    public static double t22 = 0.0;
+
+    public static double getT1() {
+        return t1;
+    }
+
+    public static void setT1(double t1) {
+        SimEmisorReceptor.t1 = t1;
+    }
+
+    public static double getT2() {
+        return t2;
+    }
+
+    public static void setT2(double t2) {
+        SimEmisorReceptor.t2 = t2;
+    }
+
+    public static double getT3() {
+        return t3;
+    }
+
+    public static void setT3(double t3) {
+        SimEmisorReceptor.t3 = t3;
+    }
+
+    public static double getT4() {
+        return t4;
+    }
+
+    public static void setT4(double t4) {
+        SimEmisorReceptor.t4 = t4;
+    }
+
+    public static double getT5() {
+        return t5;
+    }
+
+    public static void setT5(double t5) {
+        SimEmisorReceptor.t5 = t5;
+    }
+
+    public static double getT6() {
+        return t6;
+    }
+
+    public static void setT6(double t6) {
+        SimEmisorReceptor.t6 = t6;
+    }
+
+    public static double getT7() {
+        return t7;
+    }
+
+    public static void setT7(double t7) {
+        SimEmisorReceptor.t7 = t7;
+    }
+
+    public static double getT8() {
+        return t8;
+    }
+
+    public static void setT8(double t8) {
+        SimEmisorReceptor.t8 = t8;
+    }
+
+    public static double getT9() {
+        return t9;
+    }
+
+    public static void setT9(double t9) {
+        SimEmisorReceptor.t9 = t9;
+    }
+
+    public static double getT10() {
+        return t10;
+    }
+
+    public static void setT10(double t10) {
+        SimEmisorReceptor.t10 = t10;
+    }
+
+    public static double getT11() {
+        return t11;
+    }
+
+    public static void setT11(double t11) {
+        SimEmisorReceptor.t11 = t11;
+    }
+
+    public static double getT12() {
+        return t12;
+    }
+
+    public static void setT12(double t12) {
+        SimEmisorReceptor.t12 = t12;
+    }
+
+    public static double getT13() {
+        return t13;
+    }
+
+    public static void setT13(double t13) {
+        SimEmisorReceptor.t13 = t13;
+    }
+
+    public static double getT14() {
+        return t14;
+    }
+
+    public static void setT14(double t14) {
+        SimEmisorReceptor.t14 = t14;
+    }
+
+    public static double getT15() {
+        return t15;
+    }
+
+    public static void setT15(double t15) {
+        SimEmisorReceptor.t15 = t15;
+    }
+
+    public static double getT16() {
+        return t16;
+    }
+
+    public static void setT16(double t16) {
+        SimEmisorReceptor.t16 = t16;
+    }
+
+    public static double getT17() {
+        return t17;
+    }
+
+    public static void setT17(double t17) {
+        SimEmisorReceptor.t17 = t17;
+    }
+
+    public static double getT18() {
+        return t18;
+    }
+
+    public static void setT18(double t18) {
+        SimEmisorReceptor.t18 = t18;
+    }
+
+    public static double getT19() {
+        return t19;
+    }
+
+    public static void setT19(double t19) {
+        SimEmisorReceptor.t19 = t19;
+    }
+
+    public static double getT20() {
+        return t20;
+    }
+
+    public static void setT20(double t20) {
+        SimEmisorReceptor.t20 = t20;
+    }
+
+    public static double getT21() {
+        return t21;
+    }
+
+    public static void setT21(double t21) {
+        SimEmisorReceptor.t21 = t21;
+    }
+
+    public static double getT22() {
+        return t22;
+    }
+
+    public static void setT22(double t22) {
+        SimEmisorReceptor.t22 = t22;
+    }
 
     public static int getAlpha() {
         return alpha;

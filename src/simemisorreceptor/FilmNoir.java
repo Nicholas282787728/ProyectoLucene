@@ -52,7 +52,9 @@ public class FilmNoir extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        message("Ranking anterior: "+SimEmisorReceptor.formulaRanking(FilmNoir));
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(FilmNoir)))
+                            message("Ranking anterior FilmNoir: "+SimEmisorReceptor.formulaRanking(FilmNoir));
+                        SimEmisorReceptor.setT11(SimEmisorReceptor.formulaRanking(FilmNoir)+SimEmisorReceptor.getT11()-0.01);
                         
                         FilmNoir = SimEmisorReceptor.objetoFecha(11, SimEmisorReceptor.getTiempo());
                     }

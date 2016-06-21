@@ -52,7 +52,9 @@ public class Horror extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        message("Ranking anterior: "+SimEmisorReceptor.formulaRanking(Horror));  
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Horror)))
+                            message("Ranking anterior Horror: "+SimEmisorReceptor.formulaRanking(Horror));  
+                        SimEmisorReceptor.setT13(SimEmisorReceptor.formulaRanking(Horror)+SimEmisorReceptor.getT13()-0.01);
                         
                         Horror = SimEmisorReceptor.objetoFecha(13, SimEmisorReceptor.getTiempo());
                     }

@@ -53,7 +53,10 @@ public class Action extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        message("Ranking anterior: "+SimEmisorReceptor.formulaRanking(Action));
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Action)))
+                            message("Ranking anterior Accion: "+SimEmisorReceptor.formulaRanking(Action));
+                        
+                        SimEmisorReceptor.setT1(SimEmisorReceptor.formulaRanking(Action)+SimEmisorReceptor.getT1()-0.01);
                         
                         
                         Action = SimEmisorReceptor.objetoFecha(1, SimEmisorReceptor.getTiempo());

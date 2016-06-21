@@ -81,12 +81,12 @@ public class Index {
                 File[] files = dir.listFiles();
                 
                 if(files == null){
-                    System.out.println("No existe la carpeta \'input\' dentro de la carpeta files.");
+                    //System.out.println("No existe la carpeta \'input\' dentro de la carpeta files.");
                     return;
                 }
                 
                 if(files.length == 0){
-                    System.out.println("No hay ningun archivo en la carpeta \'input\' para ser indexado");
+                    //System.out.println("No hay ningun archivo en la carpeta \'input\' para ser indexado");
                     return;
                 }
                 
@@ -96,7 +96,7 @@ public class Index {
                 JSONParser jsonParser = new JSONParser();
                 for(File file : files){
                     if(file.isFile() && file.canRead() && file.getName().endsWith(".txt")){
-                        System.out.println("Indexando el archivo: "+file.getName());
+                        //System.out.println("Indexando el archivo: "+file.getName());
                         
                         br = new BufferedReader(new FileReader(file));
                         fileContent = br.readLine();

@@ -52,7 +52,9 @@ public class War extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        message("Ranking anterior: "+SimEmisorReceptor.formulaRanking(War));
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(War)))
+                            message("Ranking anterior Guerra: "+SimEmisorReceptor.formulaRanking(War));
+                        SimEmisorReceptor.setT21(SimEmisorReceptor.formulaRanking(War)+SimEmisorReceptor.getT21()-0.01);
                         
                         War = SimEmisorReceptor.objetoFecha(21, SimEmisorReceptor.getTiempo());
                     }

@@ -54,7 +54,9 @@ public class Family extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        message("Ranking anterior: "+SimEmisorReceptor.formulaRanking(Family));
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Family)))
+                            message("Ranking anterior Familiar: "+SimEmisorReceptor.formulaRanking(Family));
+                        SimEmisorReceptor.setT9(SimEmisorReceptor.formulaRanking(Family)+SimEmisorReceptor.getT9()-0.01);
                         
                         Family = SimEmisorReceptor.objetoFecha(9, SimEmisorReceptor.getTiempo());
                     }

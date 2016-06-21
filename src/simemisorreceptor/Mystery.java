@@ -53,7 +53,9 @@ public class Mystery extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        message("Ranking anterior: "+SimEmisorReceptor.formulaRanking(Mystery));
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Mystery)))
+                            message("Ranking anterior Misterio: "+SimEmisorReceptor.formulaRanking(Mystery));
+                        SimEmisorReceptor.setT16(SimEmisorReceptor.formulaRanking(Mystery)+SimEmisorReceptor.getT16()-0.01);
                         
                         Mystery = SimEmisorReceptor.objetoFecha(16, SimEmisorReceptor.getTiempo());
                     }

@@ -55,7 +55,9 @@ public class Biography extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        message("Ranking anterior: "+SimEmisorReceptor.formulaRanking(Biography));
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Biography)))
+                            message("Ranking anterior Biografia: "+SimEmisorReceptor.formulaRanking(Biography));
+                        SimEmisorReceptor.setT4(SimEmisorReceptor.formulaRanking(Biography)+SimEmisorReceptor.getT4()-0.01);
                         
                         Biography = SimEmisorReceptor.objetoFecha(4, SimEmisorReceptor.getTiempo());
                     }

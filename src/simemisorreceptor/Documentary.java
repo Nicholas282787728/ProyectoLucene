@@ -55,7 +55,9 @@ public class Documentary extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        message("Ranking anterior: "+SimEmisorReceptor.formulaRanking(Documentary));
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Documentary)))
+                            message("Ranking anterior Documental: "+SimEmisorReceptor.formulaRanking(Documentary));
+                        SimEmisorReceptor.setT7(SimEmisorReceptor.formulaRanking(Documentary)+SimEmisorReceptor.getT7()-0.01);
                         
                         Documentary = SimEmisorReceptor.objetoFecha(7, SimEmisorReceptor.getTiempo());
                     }

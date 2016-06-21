@@ -53,7 +53,9 @@ public class SciFi extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        message("Ranking anterior: "+SimEmisorReceptor.formulaRanking(SciFi));
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(SciFi)))
+                            message("Ranking anterior CienciaFiccion: "+SimEmisorReceptor.formulaRanking(SciFi));
+                        SimEmisorReceptor.setT18(SimEmisorReceptor.formulaRanking(SciFi)+SimEmisorReceptor.getT18()-0.01);
                         
                         SciFi = SimEmisorReceptor.objetoFecha(18, SimEmisorReceptor.getTiempo());
                     }

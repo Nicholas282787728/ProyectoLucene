@@ -77,10 +77,10 @@ public class Reader {
             ScoreDoc[] hits = indexSearcher.search(query, 60).scoreDocs;
             
             if (hits.length == 0){
-                 System.out.println("[Search] No se han encontrado coincidencias.");
+                 //System.out.println("[Search] No se han encontrado coincidencias.");
             } 
             else {
-                System.out.println("[Search] Se han encontrado: " + hits.length + " coincidencias.");
+                //System.out.println("[Search] Se han encontrado: " + hits.length + " coincidencias.");
                 JSONArray reviews = new JSONArray();
                 for (ScoreDoc hit : hits) {
                     Document hitDoc = indexSearcher.doc(hit.doc);
@@ -120,10 +120,10 @@ public class Reader {
             ScoreDoc[] hits = indexSearcher.search(query, 60).scoreDocs;
             
             if (hits.length == 0){
-                 System.out.println("[Search] No se han encontrado coincidencias.");
+                 //System.out.println("[Search] No se han encontrado coincidencias.");
             } 
             else {
-                System.out.println("[Search] Se han encontrado: " + hits.length + " coincidencias.");
+                //System.out.println("[Search] Se han encontrado: " + hits.length + " coincidencias.");
                 
                 for (ScoreDoc hit : hits) {
                     Document hitDoc = indexSearcher.doc(hit.doc);

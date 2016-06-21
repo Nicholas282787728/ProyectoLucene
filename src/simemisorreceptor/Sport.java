@@ -52,7 +52,9 @@ public class Sport extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        message("Ranking anterior: "+SimEmisorReceptor.formulaRanking(Sport));
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Sport)))
+                            message("Ranking anterior Deportes: "+SimEmisorReceptor.formulaRanking(Sport));
+                        SimEmisorReceptor.setT19(SimEmisorReceptor.formulaRanking(Sport)+SimEmisorReceptor.getT19()-0.01);
                         
                         Sport = SimEmisorReceptor.objetoFecha(19, SimEmisorReceptor.getTiempo());
                     }

@@ -53,7 +53,9 @@ public class Romance extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        message("Ranking anterior: "+SimEmisorReceptor.formulaRanking(Romance));
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Romance)))
+                            message("Ranking anterior Romance: "+SimEmisorReceptor.formulaRanking(Romance));
+                        SimEmisorReceptor.setT17(SimEmisorReceptor.formulaRanking(Romance)+SimEmisorReceptor.getT17()-0.01);
                         
                         Romance = SimEmisorReceptor.objetoFecha(17, SimEmisorReceptor.getTiempo());
                     }

@@ -54,7 +54,9 @@ public class Adventure extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        message("Ranking anterior: "+SimEmisorReceptor.formulaRanking(Adventure));
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Adventure)))
+                            message("Ranking anterior Aventura: "+SimEmisorReceptor.formulaRanking(Adventure));
+                        SimEmisorReceptor.setT2(SimEmisorReceptor.formulaRanking(Adventure)+SimEmisorReceptor.getT2()-0.01);
                         
                         Adventure = SimEmisorReceptor.objetoFecha(2, SimEmisorReceptor.getTiempo());
                     }

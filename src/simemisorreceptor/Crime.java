@@ -55,7 +55,9 @@ public class Crime extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        message("Ranking anterior: "+SimEmisorReceptor.formulaRanking(Crime));
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Crime)))
+                            message("Ranking anterior Crimen: "+SimEmisorReceptor.formulaRanking(Crime));
+                        SimEmisorReceptor.setT6(SimEmisorReceptor.formulaRanking(Crime)+SimEmisorReceptor.getT6()-0.01);
                         
                         Crime = SimEmisorReceptor.objetoFecha(6, SimEmisorReceptor.getTiempo());
                     }

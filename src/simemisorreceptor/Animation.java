@@ -54,7 +54,9 @@ public class Animation extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        message("Ranking anterior: "+SimEmisorReceptor.formulaRanking(Animation));
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Animation)))
+                            message("Ranking anterior Animacion: "+SimEmisorReceptor.formulaRanking(Animation));
+                        SimEmisorReceptor.setT3(SimEmisorReceptor.formulaRanking(Animation)+SimEmisorReceptor.getT3()-0.01);
                         
                         Animation = SimEmisorReceptor.objetoFecha(3, SimEmisorReceptor.getTiempo());
                     }
