@@ -40,39 +40,43 @@ public class Adventure extends JSimProcess
 
             try
             {
+                int inicio = SimEmisorReceptor.getTiempo();
+                myReview Adventure = SimEmisorReceptor.objetoFecha(2, inicio);
+                
                 while (true)
                 {
-                    boolean validaTopico = false;
                     
                     message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< leyendo bandeja mensajes de entrada <<");
                     mensaje = receiveMessageWithoutBlocking(box2);
+                    
+                    if(inicio != SimEmisorReceptor.getTiempo()){
+                        
+                        /****************************************
+                           LLAMAR FUNCION DE RANKING Y ESCRIBIR
+                        *****************************************/
+                        message("Ranking anterior: "+SimEmisorReceptor.formulaRanking(Adventure));
+                        
+                        Adventure = SimEmisorReceptor.objetoFecha(2, SimEmisorReceptor.getTiempo());
+                    }
+                    
                     if (mensaje == null){
                         message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< bandeja vacia <<");
                     }
                     else{
                         message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< Recibiendo mensaje: " + mensaje.getData().toString());
-                        validaTopico = mensaje.getData().toString().contains("topico3");
-                        if(validaTopico){
-                            message("T3 --->>> mensaje para mi (T3)");
-                        }
+                        Adventure.setScore(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 0).toString()));
+                        Adventure.setC11(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 1).toString()));
+                        Adventure.setC12(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 2).toString()));
+                        Adventure.setC13(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 3).toString()));
+                        Adventure.setC21(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 4).toString()));
+                        Adventure.setC22(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 5).toString()));
+                        Adventure.setC23(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 6).toString()));
+                        Adventure.setParcial((Adventure.getC11()*Adventure.getScore()+Adventure.getC21())/SimEmisorReceptor.alpha+SimEmisorReceptor.alpha*(Adventure.getC12()*Adventure.getScore()+Adventure.getC22())+Adventure.getC13()*Adventure.getScore()+Adventure.getC23());
+                        Adventure.setNumeroReviews(Adventure.getNumeroReviews()+1);
                     }
                     sleepTime = JSimSystem.negExp(LAMBDA);
                     message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + ": espero el siguiente mensaje");
                     hold(1);
-                    /*
-                    try {
-                        if(validaTopico){
-                            sleepTime = JSimSystem.negExp(LAMBDA);
-                            message(myParent.getCurrentTime() + " - " + getName() + ": Going to sleep for " + sleepTime + ".");
-                            hold(sleepTime);
-                        }
-                        else{
-                            //
-                        }
-                    }
-                    catch (Exception e) {
-                    }
-                    */
                 } // while
             } // try
             catch (JSimException e)

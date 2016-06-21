@@ -40,39 +40,47 @@ public class Family extends JSimProcess
 
             try
             {
+                int inicio = SimEmisorReceptor.getTiempo();
+                myReview Family = SimEmisorReceptor.objetoFecha(9, inicio);
+                
                 while (true)
                 {
-                    boolean validaTopico = false;
                     
                     message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< leyendo bandeja mensajes de entrada <<");
                     mensaje = receiveMessageWithoutBlocking(box9);
+                    
+                    if(inicio != SimEmisorReceptor.getTiempo()){
+                        
+                        /****************************************
+                           LLAMAR FUNCION DE RANKING Y ESCRIBIR
+                        *****************************************/
+                        message("Ranking anterior: "+SimEmisorReceptor.formulaRanking(Family));
+                        
+                        Family = SimEmisorReceptor.objetoFecha(9, SimEmisorReceptor.getTiempo());
+                    }
+                    
+                    if (mensaje == null){
+                        message("sin mensajes...");
+                    }                    
+
                     if (mensaje == null){
                         message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< bandeja vacia <<");
                     }
                     else{
                         message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< Recibiendo mensaje: " + mensaje.getData().toString());
-                        validaTopico = mensaje.getData().toString().contains("topico3");
-                        if(validaTopico){
-                            message("T3 --->>> mensaje para mi (T3)");
-                        }
+                        Family.setScore(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 0).toString()));
+                        Family.setC11(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 1).toString()));
+                        Family.setC12(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 2).toString()));
+                        Family.setC13(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 3).toString()));
+                        Family.setC21(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 4).toString()));
+                        Family.setC22(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 5).toString()));
+                        Family.setC23(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 6).toString()));
+                        Family.setParcial((Family.getC11()*Family.getScore()+Family.getC21())/SimEmisorReceptor.alpha+SimEmisorReceptor.alpha*(Family.getC12()*Family.getScore()+Family.getC22())+Family.getC13()*Family.getScore()+Family.getC23());
+                        Family.setNumeroReviews(Family.getNumeroReviews()+1);
                     }
                     sleepTime = JSimSystem.negExp(LAMBDA);
                     message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + ": espero el siguiente mensaje");
                     hold(1);
-                    /*
-                    try {
-                        if(validaTopico){
-                            sleepTime = JSimSystem.negExp(LAMBDA);
-                            message(myParent.getCurrentTime() + " - " + getName() + ": Going to sleep for " + sleepTime + ".");
-                            hold(sleepTime);
-                        }
-                        else{
-                            //
-                        }
-                    }
-                    catch (Exception e) {
-                    }
-                    */
                 } // while
             } // try
             catch (JSimException e)

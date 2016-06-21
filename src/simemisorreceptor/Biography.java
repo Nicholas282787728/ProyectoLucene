@@ -40,39 +40,44 @@ public class Biography extends JSimProcess
 
             try
             {
+                int inicio = SimEmisorReceptor.getTiempo();
+                myReview Biography = SimEmisorReceptor.objetoFecha(4, inicio);
+                
                 while (true)
                 {
                     boolean validaTopico = false;
                     
                     message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< leyendo bandeja mensajes de entrada <<");
                     mensaje = receiveMessageWithoutBlocking(box4);
+                    
+                    if(inicio != SimEmisorReceptor.getTiempo()){
+                        
+                        /****************************************
+                           LLAMAR FUNCION DE RANKING Y ESCRIBIR
+                        *****************************************/
+                        message("Ranking anterior: "+SimEmisorReceptor.formulaRanking(Biography));
+                        
+                        Biography = SimEmisorReceptor.objetoFecha(4, SimEmisorReceptor.getTiempo());
+                    }
+                    
                     if (mensaje == null){
                         message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< bandeja vacia <<");
                     }
                     else{
                         message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< Recibiendo mensaje: " + mensaje.getData().toString());
-                        validaTopico = mensaje.getData().toString().contains("topico3");
-                        if(validaTopico){
-                            message("T3 --->>> mensaje para mi (T3)");
-                        }
+                        Biography.setScore(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 0).toString()));
+                        Biography.setC11(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 1).toString()));
+                        Biography.setC12(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 2).toString()));
+                        Biography.setC13(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 3).toString()));
+                        Biography.setC21(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 4).toString()));
+                        Biography.setC22(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 5).toString()));
+                        Biography.setC23(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 6).toString()));
+                        Biography.setParcial((Biography.getC11()*Biography.getScore()+Biography.getC21())/SimEmisorReceptor.alpha+SimEmisorReceptor.alpha*(Biography.getC12()*Biography.getScore()+Biography.getC22())+Biography.getC13()*Biography.getScore()+Biography.getC23());
+                        Biography.setNumeroReviews(Biography.getNumeroReviews()+1);
                     }
                     sleepTime = JSimSystem.negExp(LAMBDA);
                     message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + ": espero el siguiente mensaje");
                     hold(1);
-                    /*
-                    try {
-                        if(validaTopico){
-                            sleepTime = JSimSystem.negExp(LAMBDA);
-                            message(myParent.getCurrentTime() + " - " + getName() + ": Going to sleep for " + sleepTime + ".");
-                            hold(sleepTime);
-                        }
-                        else{
-                            //
-                        }
-                    }
-                    catch (Exception e) {
-                    }
-                    */
                 } // while
             } // try
             catch (JSimException e)

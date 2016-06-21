@@ -270,7 +270,7 @@ public class Emisor  extends JSimProcess
                 {
                     for(Review rHoydia : this.reviews){
 
-                        SimEmisorReceptor.setTiempo(SimEmisorReceptor.getTiempo());
+                        SimEmisorReceptor.setTiempo(rHoydia.getFecha());
 
                         //n-p-u >> clasificador 1 y 2
                         //score
@@ -381,6 +381,7 @@ public class Emisor  extends JSimProcess
                             message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "> Mensaje enviado.");
                         }
                     message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + ": hibernando por " + 1 + " día.");
+                    
                     sleepTime = SimEmisorReceptor.getTiempo()+1;
                     hold(1);
                     i++;

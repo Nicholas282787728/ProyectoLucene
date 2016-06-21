@@ -40,39 +40,41 @@ public class Mystery extends JSimProcess
 
             try
             {
+                int inicio = SimEmisorReceptor.getTiempo();
+                myReview Mystery = SimEmisorReceptor.objetoFecha(16, inicio);
+                
                 while (true)
                 {
-                    boolean validaTopico = false;
-                    
+
                     message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< leyendo bandeja mensajes de entrada <<");
                     mensaje = receiveMessageWithoutBlocking(box16);
+                    if(inicio != SimEmisorReceptor.getTiempo()){
+                        
+                        /****************************************
+                           LLAMAR FUNCION DE RANKING Y ESCRIBIR
+                        *****************************************/
+                        message("Ranking anterior: "+SimEmisorReceptor.formulaRanking(Mystery));
+                        
+                        Mystery = SimEmisorReceptor.objetoFecha(16, SimEmisorReceptor.getTiempo());
+                    }
                     if (mensaje == null){
                         message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< bandeja vacia <<");
                     }
                     else{
                         message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< Recibiendo mensaje: " + mensaje.getData().toString());
-                        validaTopico = mensaje.getData().toString().contains("topico3");
-                        if(validaTopico){
-                            message("T3 --->>> mensaje para mi (T3)");
-                        }
+                        Mystery.setScore(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 0).toString()));
+                        Mystery.setC11(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 1).toString()));
+                        Mystery.setC12(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 2).toString()));
+                        Mystery.setC13(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 3).toString()));
+                        Mystery.setC21(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 4).toString()));
+                        Mystery.setC22(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 5).toString()));
+                        Mystery.setC23(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 6).toString()));
+                        Mystery.setParcial((Mystery.getC11()*Mystery.getScore()+Mystery.getC21())/SimEmisorReceptor.alpha+SimEmisorReceptor.alpha*(Mystery.getC12()*Mystery.getScore()+Mystery.getC22())+Mystery.getC13()*Mystery.getScore()+Mystery.getC23());
+                        Mystery.setNumeroReviews(Mystery.getNumeroReviews()+1);
                     }
                     sleepTime = JSimSystem.negExp(LAMBDA);
                     message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + ": espero el siguiente mensaje");
                     hold(1);
-                    /*
-                    try {
-                        if(validaTopico){
-                            sleepTime = JSimSystem.negExp(LAMBDA);
-                            message(myParent.getCurrentTime() + " - " + getName() + ": Going to sleep for " + sleepTime + ".");
-                            hold(sleepTime);
-                        }
-                        else{
-                            //
-                        }
-                    }
-                    catch (Exception e) {
-                    }
-                    */
                 } // while
             } // try
             catch (JSimException e)

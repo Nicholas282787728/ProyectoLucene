@@ -8,6 +8,7 @@ package simemisorreceptor;
 import cz.zcu.fav.kiv.jsim.JSimException;
 import cz.zcu.fav.kiv.jsim.JSimSimulation;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessageBox;
+import java.util.Arrays;
 import java.util.List;
 import luceneprueba.utils.Review;
 
@@ -21,13 +22,145 @@ public class SimEmisorReceptor {
      * @param args the command line arguments
      */
     public static int tiempo = 19990418;
+    public static int alpha = 2;
 
+    public static int getAlpha() {
+        return alpha;
+    }
+
+    public static void setAlpha(int alpha) {
+        SimEmisorReceptor.alpha = alpha;
+    }
+
+    public static myReview objetoFecha(int genero, int tiempo){
+    
+        if(genero == 1){
+            myReview Action;
+            Action = new myReview(tiempo);
+            return Action;
+        }
+        if(genero == 2){
+            myReview Adventure;
+            Adventure = new myReview(tiempo);
+            return Adventure;
+        }
+        if(genero == 3){
+            myReview Animation;
+            Animation = new myReview(tiempo);
+            return Animation;
+        }         
+        if(genero == 4){
+            myReview Biography;
+            Biography = new myReview(tiempo);
+            return Biography;
+        }        
+        if(genero == 5){
+            myReview Comedy;
+            Comedy = new myReview(tiempo);
+            return Comedy;
+        }
+        if(genero == 6){
+            myReview Crime;
+            Crime = new myReview(tiempo);
+            return Crime;
+        }        
+        if(genero == 7){
+            myReview Documentary;
+            Documentary = new myReview(tiempo);
+            return Documentary;
+        }         
+        if(genero == 8){
+            myReview Drama;
+            Drama = new myReview(tiempo);
+            return Drama;
+        }
+        if(genero == 9){
+            myReview Family;
+            Family = new myReview(tiempo);
+            return Family;
+        }             
+        if(genero == 10){
+            myReview Fantasy;
+            Fantasy = new myReview(tiempo);
+            return Fantasy;
+        }
+        if(genero == 11){
+            myReview FilmNoir;
+            FilmNoir = new myReview(tiempo);
+            return FilmNoir;
+        }
+        if(genero == 12){
+            myReview History;
+            History = new myReview(tiempo);
+            return History;
+        }
+        if(genero == 13){
+            myReview Horror;
+            Horror = new myReview(tiempo);
+            return Horror;
+        }        
+        if(genero == 14){
+            myReview Music;
+            Music = new myReview(tiempo);
+            return Music;
+        } 
+        if(genero == 15){
+            myReview Musical;
+            Musical = new myReview(tiempo);
+            return Musical;
+        }
+        if(genero == 16){
+            myReview Mystery;
+            Mystery = new myReview(tiempo);
+            return Mystery;
+        }
+        if(genero == 17){
+            myReview Romance;
+            Romance = new myReview(tiempo);
+            return Romance;
+        }  
+        if(genero == 18){
+            myReview SciFi;
+            SciFi = new myReview(tiempo);
+            return SciFi;
+        }             
+        if(genero == 19){
+            myReview Sport;
+            Sport = new myReview(tiempo);
+            return Sport;
+        }         
+        if(genero == 20){
+            myReview Thriller;
+            Thriller = new myReview(tiempo);
+            return Thriller;
+        }
+        if(genero == 21){
+            myReview War;
+            War = new myReview(tiempo);
+            return War;
+        }
+        else{
+            myReview Western;
+            Western = new myReview(tiempo);
+            return Western;
+        }  
+    }
+    
+    
+    
     public static int getTiempo() {
         return tiempo;
     }
 
     public static void setTiempo(int tiempo) {
-        SimEmisorReceptor.tiempo = tiempo+1;
+        //SimEmisorReceptor.tiempo = tiempo+1;
+        SimEmisorReceptor.tiempo = tiempo;
+    }
+    
+    public static Double retornaValor(String mensaje, int posicion) {
+        String[] items = mensaje.split(" ");
+        List<String> itemList = Arrays.asList(items);
+        return Double.parseDouble(itemList.get(posicion));
     }
     
     public static String FormatoFecha(int intFecha) {
@@ -37,8 +170,12 @@ public class SimEmisorReceptor {
         return fecha;
     }
       
-    public static Integer formulaRanking(int intFecha) {
-        return 1;
+    public static double formulaRanking(myReview s) {
+        double valorRanking;       
+       //((s.getC11()*s.getScore()+s.getC21())/alpha+alpha*(s.getC12()*s.getScore()+s.getC22())+s.getC13()*s.getScore()+s.getC23())/(alpha*C)
+        valorRanking = s.getParcial()/(alpha*s.getNumeroReviews());
+        
+        return valorRanking;
     }
     
     public static void main(List<Review> reviews) {
@@ -72,14 +209,14 @@ public class SimEmisorReceptor {
         War receiverT21;
         Western receiverT22;
 
-        int tiempo = 19990419;
+        //int tiempo = 19990419;
 
         try
         {
                 System.out.println("Inicializando parametros de simulación...");
                 //System.out.println("Total de reviews: " + reviews.size());
                 
-                
+                setTiempo(reviews.get(0).getFecha());
                 
                 
                 //System.exit(1);
@@ -164,7 +301,7 @@ public class SimEmisorReceptor {
         } // try
         catch (JSimException e)
         {
-                e.printStackTrace();
+                //e.printStackTrace();
                 e.printComment(System.err);
         } // catch
         finally

@@ -39,40 +39,49 @@ public class Comedy extends JSimProcess
             double sleepTime;
 
             try
-            {
+            {  
+                int inicio = SimEmisorReceptor.getTiempo();
+                myReview Comedy = SimEmisorReceptor.objetoFecha(5, inicio);
+                
                 while (true)
                 {
-                    boolean validaTopico = false;
                     
                     message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< leyendo bandeja mensajes de entrada <<");
                     mensaje = receiveMessageWithoutBlocking(box5);
+                    
+                    
+                    if(inicio != SimEmisorReceptor.getTiempo()){
+                        
+                        /****************************************
+                           LLAMAR FUNCION DE RANKING Y ESCRIBIR
+                        *****************************************/
+                        message("Ranking anterior: "+SimEmisorReceptor.formulaRanking(Comedy));
+                        
+                        Comedy = SimEmisorReceptor.objetoFecha(5, SimEmisorReceptor.getTiempo());
+                    }
+                    
+                    if (mensaje == null){
+                        message("sin mensajes...");
+                    }                    
+                    
                     if (mensaje == null){
                         message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< bandeja vacia <<");
                     }
                     else{
                         message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< Recibiendo mensaje: " + mensaje.getData().toString());
-                        validaTopico = mensaje.getData().toString().contains("topico3");
-                        if(validaTopico){
-                            message("T3 --->>> mensaje para mi (T3)");
-                        }
+                        Comedy.setScore(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 0).toString()));
+                        Comedy.setC11(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 1).toString()));
+                        Comedy.setC12(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 2).toString()));
+                        Comedy.setC13(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 3).toString()));
+                        Comedy.setC21(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 4).toString()));
+                        Comedy.setC22(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 5).toString()));
+                        Comedy.setC23(Double.parseDouble(SimEmisorReceptor.retornaValor(mensaje.getData().toString(), 6).toString()));
+                        Comedy.setParcial((Comedy.getC11()*Comedy.getScore()+Comedy.getC21())/SimEmisorReceptor.alpha+SimEmisorReceptor.alpha*(Comedy.getC12()*Comedy.getScore()+Comedy.getC22())+Comedy.getC13()*Comedy.getScore()+Comedy.getC23());
+                        Comedy.setNumeroReviews(Comedy.getNumeroReviews()+1);
                     }
                     sleepTime = JSimSystem.negExp(LAMBDA);
                     message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + ": espero el siguiente mensaje");
                     hold(1);
-                    /*
-                    try {
-                        if(validaTopico){
-                            sleepTime = JSimSystem.negExp(LAMBDA);
-                            message(myParent.getCurrentTime() + " - " + getName() + ": Going to sleep for " + sleepTime + ".");
-                            hold(sleepTime);
-                        }
-                        else{
-                            //
-                        }
-                    }
-                    catch (Exception e) {
-                    }
-                    */
                 } // while
             } // try
             catch (JSimException e)
