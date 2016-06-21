@@ -65,7 +65,8 @@ public class LucenePrueba {
                         break;
                     case 4:    
                         Reader retriveReviews = new Reader(index.getDirectory(), index.getAnalyzer());
-                        retriveReviews.retriveReviewsByDate();
+                        //retriveReviews.retriveReviewsByDate();
+                        System.out.println("El largo de la lista resultante es: " + retriveReviews.retriveListReviewsByDate().size());
                         break;
                     case 5:
                         FileParser.createFilesFromJSONArray();

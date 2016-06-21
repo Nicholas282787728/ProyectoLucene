@@ -134,8 +134,8 @@ public class Reader {
                     double [] clasif1 = {Double.parseDouble(c1[0]), Double.parseDouble(c1[1]), Double.parseDouble(c1[2])};
                     double [] clasif2 = {Double.parseDouble(c2[0]), Double.parseDouble(c2[1]), Double.parseDouble(c2[2])};
                     
-                    reviews.add(new Review(nullReview.convertDate(hitDoc.get("date")),
-                                           nullReview.convertScore(hitDoc.get("score")), 
+                    reviews.add(new Review(Integer.parseInt(hitDoc.get("date")),
+                                           Double.parseDouble(hitDoc.get("score")), 
                                            hitDoc.get("genre").split(", "), 
                                            clasif1, 
                                            clasif2)
@@ -164,7 +164,7 @@ public class Reader {
                 searchOnIndex((String) json.get("review"), (String) json.get("date"));
             }
             br.close();
-            indexReader.close();
+            //indexReader.close();
             
         } catch (FileNotFoundException | org.json.simple.parser.ParseException ex) {
             for(StackTraceElement st : ex.getStackTrace()){
@@ -182,7 +182,7 @@ public class Reader {
     public List<List<Review>> retriveListReviewsByDate(){
         List<List<Review>> reviews = new ArrayList();
         List<Review> reviewsByDate = getListFromSearchOnIndexByDate();
-        
+        System.out.println("\n\n---- Cantidad de reviews recuperados por fecha: " + reviewsByDate.size() + "\n\n");
         for(Review review : reviewsByDate){
             System.out.println("Recuperando los top-60 reviews del día " + review.getFecha());
             reviews.add(getListBySearchOnIndex(review.getReview(), review.getFecha()+""));
@@ -227,7 +227,7 @@ public class Reader {
                 file.write(reviews.toJSONString());
                 file.flush();
             }
-            indexReader.close();
+            //indexReader.close();
             
 
         } catch (ParseException | IOException ex) {
@@ -252,7 +252,7 @@ public class Reader {
             
             
             while ((date = br.readLine()) != null) {
-                query = parser.parse("date: \"+" + date + "\"");
+                query = parser.parse("date: \"+" + nullReview.convertDate(date) + "\"");
                 ScoreDoc[] hits = indexSearcher.search(query, 1).scoreDocs;
 
                 if (hits.length == 0){
@@ -268,8 +268,9 @@ public class Reader {
                     double [] clasif1 = {Double.parseDouble(c1[0]), Double.parseDouble(c1[1]), Double.parseDouble(c1[2])};
                     double [] clasif2 = {Double.parseDouble(c2[0]), Double.parseDouble(c2[1]), Double.parseDouble(c2[2])};
                     
-                    reviews.add(new Review(nullReview.convertDate(hitDoc.get("date")),
-                                           nullReview.convertScore(hitDoc.get("score")), 
+                    reviews.add(new Review(Integer.parseInt(hitDoc.get("date")),
+                                           hitDoc.get("review"),
+                                           Double.parseDouble(hitDoc.get("score")), 
                                            hitDoc.get("genre").split(", "), 
                                            clasif1, 
                                            clasif2)
@@ -279,7 +280,7 @@ public class Reader {
                 }
             }
             
-            indexReader.close();
+            //indexReader.close();
             
         } 
         catch (ParseException | IOException ex) {

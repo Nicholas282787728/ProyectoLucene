@@ -206,14 +206,16 @@ public class Review {
                 System.out.println("Guardando la linea: " + datos);
                 String datosClasificadorActor=brActorClassificator.readLine();
                 String datosClasificadorMovie=brMovieClassificator.readLine();
-                String [] reviewContent = new BufferedReader(new FileReader(files[i])).readLine().split(" ", 2);
                 
+                BufferedReader brReview = new BufferedReader(new FileReader(files[i]));
+                String [] reviewContent = brReview.readLine().split(" ", 2);
+                brReview.close();
                 
                 String [] datosParser = datos.split("_");
                 //String [] datosParserClasificadorActor = datosClasificadorActor.split(" ");
                // String [] datoParserClasificadorMovie = datosClasificadorMovie.split(" ");
                               
-                
+                System.out.println("Review content: " + reviewContent[1]);
                 if(datosParser.length == 4){
                     //System.out.println(datosParser[0]+"_"+convertDate(datosParser[1])+"_"+Arrays.toString(datosParser[2].split(", "))+"_"+convertScore(datosParser[3]));
                     reviews.add(new Review(convertDate(datosParser[1]), 
