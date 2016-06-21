@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
@@ -27,6 +28,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import luceneprueba.CustomAnalyzers.ReviewAnalyzer;
+import luceneprueba.utils.Review;
 /**
  *
  * @author JAno
@@ -124,4 +126,29 @@ public class Index {
         }
     }
     
+    public void create(List<Review> reviews){
+        try{
+            // Storing index in disk
+            IndexWriterConfig config = new IndexWriterConfig(analyzer);
+            try (IndexWriter iwriter = new IndexWriter(directory, config)) {
+                
+                Document doc;
+                for(Review review : reviews){
+                    doc = new Document();
+                    doc.add(new TextField("score",  review.getScore()+"", Field.Store.YES));
+                    doc.add(new TextField("date", review.getFecha()+"", Field.Store.YES));
+                    doc.add(new TextField("review", review.getReview(), Field.Store.YES));
+                    doc.add(new TextField("genre", Arrays.toString(review.getTopicos()).replace("[", "").replace("]", ""), Field.Store.YES));
+                    doc.add(new TextField("clasif1", Arrays.toString(review.getClasificador1()).replace("[", "").replace("]", ""), Field.Store.YES));
+                    doc.add(new TextField("clasif2", Arrays.toString(review.getClasificador2()).replace("[", "").replace("]", ""), Field.Store.YES));
+                    iwriter.addDocument(doc);
+                }
+                
+                iwriter.close();
+            }
+        }
+        catch(IOException e){
+            e.printStackTrace(System.out);
+        }
+    }
 }

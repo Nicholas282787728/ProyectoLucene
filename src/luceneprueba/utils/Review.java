@@ -6,6 +6,7 @@
 package luceneprueba.utils;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -28,6 +29,7 @@ public class Review {
     
     private int id;
     private int fecha;
+    private String review;
     private double score;
     private String [] topicos;
     private double [] clasificador1;
@@ -54,6 +56,25 @@ public class Review {
     public Review(int id, int fecha, double score, String [] topicos, double [] clasificador1, double [] clasificador2){
         this.id = id;
         this.fecha = fecha;
+        this.score = score;
+        this.topicos = topicos;
+        this.clasificador1 = clasificador1;
+        this.clasificador2 = clasificador2;
+    }
+
+    public Review(int fecha, double score, String [] topicos, double [] clasificador1, double [] clasificador2){
+        this.id = 0;
+        this.fecha = fecha;
+        this.score = score;
+        this.topicos = topicos;
+        this.clasificador1 = clasificador1;
+        this.clasificador2 = clasificador2;
+    }
+
+    public Review(int fecha, String review, double score, String [] topicos, double [] clasificador1, double [] clasificador2){
+        this.id = 0;
+        this.fecha = fecha;
+        this.review = review;
         this.score = score;
         this.topicos = topicos;
         this.clasificador1 = clasificador1;
@@ -106,6 +127,14 @@ public class Review {
 
     public void setClasificador2(double[] clasificador2) {
         this.clasificador2 = clasificador2;
+    }
+
+    public String getReview() {
+        return review;
+    }
+
+    public void setReview(String review) {
+        this.review = review;
     }
     
     public int convertDate(String date){
@@ -167,13 +196,19 @@ public class Review {
             BufferedReader br = new BufferedReader(new FileReader("files/output/datos_reviews.txt"));
             BufferedReader brActorClassificator = new BufferedReader(new FileReader("files/output/clasificador_actor.txt"));
             BufferedReader brMovieClassificator = new BufferedReader(new FileReader("files/output/clasificador_pelicula.txt"));            
+        
+            File dir = new File("files/output/clasificador");
+            File[] files = dir.listFiles();
             String datos;
+            int i = 0;
             
             while ((datos = br.readLine()) != null) {
                 System.out.println("Guardando la linea: " + datos);
                 String datosClasificadorActor=brActorClassificator.readLine();
                 String datosClasificadorMovie=brMovieClassificator.readLine();
-                                
+                String [] reviewContent = new BufferedReader(new FileReader(files[i])).readLine().split(" ", 2);
+                
+                
                 String [] datosParser = datos.split("_");
                 //String [] datosParserClasificadorActor = datosClasificadorActor.split(" ");
                // String [] datoParserClasificadorMovie = datosClasificadorMovie.split(" ");
@@ -181,8 +216,8 @@ public class Review {
                 
                 if(datosParser.length == 4){
                     //System.out.println(datosParser[0]+"_"+convertDate(datosParser[1])+"_"+Arrays.toString(datosParser[2].split(", "))+"_"+convertScore(datosParser[3]));
-                    reviews.add(new Review(Integer.parseInt(datosParser[0]), 
-                                           convertDate(datosParser[1]), 
+                    reviews.add(new Review(convertDate(datosParser[1]), 
+                                           reviewContent[1],
                                            convertScore(datosParser[3]), 
                                            datosParser[2].split(", "), 
                                            createArrayClasificador(datosClasificadorActor), 
@@ -191,14 +226,16 @@ public class Review {
                 }
                 else{
                     //System.out.println(datosParser[0]+"_"+convertDate(datosParser[1])+"_"+Arrays.toString(datosParser[2].split(", "))+"_"+0.0);
-                    reviews.add(new Review(Integer.parseInt(datosParser[0]), 
-                                           convertDate(datosParser[1]), 
+                    reviews.add(new Review(convertDate(datosParser[1]), 
+                                           reviewContent[1],
                                            0.0, 
                                            datosParser[2].split(", "), 
                                            createArrayClasificador(datosClasificadorActor), 
                                            createArrayClasificador(datosClasificadorMovie)
                             ));
                 }
+                
+                i++;
             }
         } catch (FileNotFoundException ex) {
             ex.printStackTrace(System.out);
@@ -208,9 +245,11 @@ public class Review {
         System.out.println("Largo de la lista de reviews: "+reviews.size());
         
         // print review object array
+        /*
         for (Review review : reviews) {
-            System.out.println(review.getId() + " " + Arrays.toString(review.getClasificador1()));
+            System.out.println(review.getId() + " " + review.getReview() + " " + Arrays.toString(review.getClasificador1()));
         }
+        */
         
         return reviews;
     }

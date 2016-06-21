@@ -47,7 +47,7 @@ public class LucenePrueba {
                 
                 switch(opcion){
                     case 1:
-                        index.create();
+                        index.create(nullReview.getListForTxt());
                         System.out.println("Índice creado con éxito");
                         break;
                     case 2:
@@ -61,7 +61,7 @@ public class LucenePrueba {
                         break;
                     case 3:
                         Reader reader_date = new Reader(index.getDirectory(), index.getAnalyzer());
-                        reader_date.searchOnIndex();
+                        reader_date.searchOnIndexByDate();
                         break;
                     case 4:    
                         Reader retriveReviews = new Reader(index.getDirectory(), index.getAnalyzer());
@@ -81,7 +81,7 @@ public class LucenePrueba {
                         break;
                 }
                 System.out.print("\n\n\n\n");
-            } while(opcion != opcion);
+            } while(opcion != 7);
             
             index.getDirectory().close();
             

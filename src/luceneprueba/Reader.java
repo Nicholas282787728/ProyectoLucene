@@ -10,10 +10,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import luceneprueba.utils.Review;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
@@ -106,6 +109,49 @@ public class Reader {
         
     }
     
+    public List<Review> getListBySearchOnIndex(String wordQuery, String date){
+        List<Review> reviews = new ArrayList();
+        // Parse a simple query that searches for "text":
+        QueryParser parser = new QueryParser("review", analyzer);
+        Query query;
+        Review nullReview = new Review();
+        try {
+            query = parser.parse("date: \"+" + date + "\" AND " + cleanInput(wordQuery));
+            ScoreDoc[] hits = indexSearcher.search(query, 60).scoreDocs;
+            
+            if (hits.length == 0){
+                 System.out.println("[Search] No se han encontrado coincidencias.");
+            } 
+            else {
+                System.out.println("[Search] Se han encontrado: " + hits.length + " coincidencias.");
+                
+                for (ScoreDoc hit : hits) {
+                    Document hitDoc = indexSearcher.doc(hit.doc);
+                    
+                    String [] c1 = hitDoc.get("clasif1").split(", ");
+                    String [] c2 = hitDoc.get("clasif2").split(", ");
+                    
+                    double [] clasif1 = {Double.parseDouble(c1[0]), Double.parseDouble(c1[1]), Double.parseDouble(c1[2])};
+                    double [] clasif2 = {Double.parseDouble(c2[0]), Double.parseDouble(c2[1]), Double.parseDouble(c2[2])};
+                    
+                    reviews.add(new Review(nullReview.convertDate(hitDoc.get("date")),
+                                           nullReview.convertScore(hitDoc.get("score")), 
+                                           hitDoc.get("genre").split(", "), 
+                                           clasif1, 
+                                           clasif2)
+                                );
+                }                
+            }
+
+        } catch (ParseException | IOException ex) {
+            for(StackTraceElement st : ex.getStackTrace()){
+                System.out.println(st.toString());
+            }
+            System.out.println(ex.getLocalizedMessage());
+        }
+        return reviews;
+    }
+    
     public void retriveReviewsByDate(){
         try {
             BufferedReader br = new BufferedReader(new FileReader("files/output/review_date.json"));
@@ -133,7 +179,19 @@ public class Reader {
         }
     }
     
-    public void searchOnIndex(){
+    public List<List<Review>> retriveListReviewsByDate(){
+        List<List<Review>> reviews = new ArrayList();
+        List<Review> reviewsByDate = getListFromSearchOnIndexByDate();
+        
+        for(Review review : reviewsByDate){
+            System.out.println("Recuperando los top-60 reviews del día " + review.getFecha());
+            reviews.add(getListBySearchOnIndex(review.getReview(), review.getFecha()+""));
+        }
+        
+        return reviews;
+    }
+    
+    public void searchOnIndexByDate(){
         // Parse a simple query that searches for "text":
         QueryParser parser = new QueryParser("review", analyzer);
         Query query;
@@ -182,4 +240,56 @@ public class Reader {
         
     }
     
+    public List<Review> getListFromSearchOnIndexByDate(){
+        List<Review> reviews = new ArrayList();
+        // Parse a simple query that searches for "text":
+        QueryParser parser = new QueryParser("review", analyzer);
+        Query query;
+        Review nullReview = new Review();
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("files/dates_reviews"));
+            String date;
+            
+            
+            while ((date = br.readLine()) != null) {
+                query = parser.parse("date: \"+" + date + "\"");
+                ScoreDoc[] hits = indexSearcher.search(query, 1).scoreDocs;
+
+                if (hits.length == 0){
+                    System.out.println("No se encontraron reviews para la fecha " + date);
+                }
+                else{
+                    System.out.println("Guardando review de la fecha " + date);
+                    Document hitDoc = indexSearcher.doc(hits[0].doc);
+
+                    String [] c1 = hitDoc.get("clasif1").split(", ");
+                    String [] c2 = hitDoc.get("clasif2").split(", ");
+                    
+                    double [] clasif1 = {Double.parseDouble(c1[0]), Double.parseDouble(c1[1]), Double.parseDouble(c1[2])};
+                    double [] clasif2 = {Double.parseDouble(c2[0]), Double.parseDouble(c2[1]), Double.parseDouble(c2[2])};
+                    
+                    reviews.add(new Review(nullReview.convertDate(hitDoc.get("date")),
+                                           nullReview.convertScore(hitDoc.get("score")), 
+                                           hitDoc.get("genre").split(", "), 
+                                           clasif1, 
+                                           clasif2)
+                                );
+
+                    
+                }
+            }
+            
+            indexReader.close();
+            
+        } 
+        catch (ParseException | IOException ex) {
+            Logger.getLogger(Reader.class.getName()).log(Level.SEVERE, null, ex);
+            for(StackTraceElement st : ex.getStackTrace()){
+                System.out.println(st.toString());
+            }
+            System.out.println(ex.getLocalizedMessage());
+            
+        }
+        return reviews;
+    }
 }
