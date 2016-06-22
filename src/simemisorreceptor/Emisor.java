@@ -18,6 +18,7 @@ import cz.zcu.fav.kiv.jsim.ipc.JSimMessageBox;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessageForReceiver;
 import java.util.List;
 import luceneprueba.utils.Review;
+import sun.java2d.cmm.ColorTransform;
 
 /**
  *
@@ -268,7 +269,14 @@ public class Emisor  extends JSimProcess
                 //leo todos los reviews de esta fecha
                 while (true)
                 {
+                    int dias = this.reviews.size();
+                    
                     for(List<Review> r1Hoydia : this.reviews){
+                        dias--;
+                        
+                        if(dias-1 == -1){
+                            SimEmisorReceptor.setFin(true);
+                        }
                         
                         SimEmisorReceptor.setTiempo(r1Hoydia.get(0).getFecha());
                         

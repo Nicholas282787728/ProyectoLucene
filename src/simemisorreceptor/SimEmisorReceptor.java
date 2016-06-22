@@ -24,6 +24,10 @@ public class SimEmisorReceptor {
     public static int tiempo = 19990418;
     public static int alpha = 2;
     public static double enfria = 1.0; 
+    public static boolean fin = false;
+    
+    public static JSimSimulation simulation = null;
+    
     public static double t1 = 0.0;
     public static double t2 = 0.0;
     public static double t3 = 0.0;
@@ -47,7 +51,24 @@ public class SimEmisorReceptor {
     public static double t21 = 0.0;
     public static double t22 = 0.0;
 
+    public static JSimSimulation getSimulation() {
+        return simulation;
+    }
+
+    public static void setSimulation(JSimSimulation simulation) {
+        SimEmisorReceptor.simulation = simulation;
+    }
+
     
+    
+    public static boolean isFin() {
+        return fin;
+    }
+
+    public static void setFin(boolean fin) {
+        SimEmisorReceptor.fin = fin;
+    }
+
     public static double getEnfria() {
         return enfria;
     }
@@ -391,7 +412,7 @@ public class SimEmisorReceptor {
         
         
         
-        JSimSimulation simulation = null;
+        SimEmisorReceptor.setSimulation(null);
         JSimMessageBox box = null;
         Emisor sender;
 
@@ -505,7 +526,7 @@ public class SimEmisorReceptor {
 
                 simulation.message("Comienza la simulación >>> ");
 
-                while (simulation.step() == true)
+                while (simulation.step() && !fin)
                         ;
         } // try
         catch (JSimException e)
