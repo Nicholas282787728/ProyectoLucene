@@ -14,6 +14,10 @@ import cz.zcu.fav.kiv.jsim.JSimSystem;
 import cz.zcu.fav.kiv.jsim.JSimTooManyProcessesException;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessage;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessageBox;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -42,6 +46,8 @@ public class Drama extends JSimProcess
             {
                 int inicio = SimEmisorReceptor.getTiempo();
                 myReview Drama = SimEmisorReceptor.objetoFecha(8, inicio);
+                
+                FileWriter file = new FileWriter("files/output/ranking/drama.csv");
                 while (true)
                 {
                     inicio = Drama.getFecha();
@@ -53,10 +59,18 @@ public class Drama extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Drama)))
-                            message(inicio+" Ranking acumulado Drama: "+SimEmisorReceptor.getT8());
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Drama))){
+                            message(inicio+" Ranking acumulado Biography: "+SimEmisorReceptor.getT8());
+                            file.write(SimEmisorReceptor.FormatoFecha(inicio)+","+SimEmisorReceptor.getT8()+"\n");
+                        }
                         
-                        SimEmisorReceptor.setT8(SimEmisorReceptor.formulaRanking(Drama)+SimEmisorReceptor.getT8()-SimEmisorReceptor.enfria);
+                        double ranking = SimEmisorReceptor.formulaRanking(Drama)+SimEmisorReceptor.getT8()-SimEmisorReceptor.enfria;
+                        if(ranking > 0.0){
+                            SimEmisorReceptor.setT8(ranking);
+                        }
+                        else{
+                            SimEmisorReceptor.setT8(0.0);
+                        }
 
                         Drama = SimEmisorReceptor.objetoFecha(8, SimEmisorReceptor.getTiempo());
                         
@@ -91,7 +105,9 @@ public class Drama extends JSimProcess
             {
                 e.printStackTrace();
                 e.printComment(System.err);
-            } // catch
+            } catch (IOException ex) {
+            Logger.getLogger(Drama.class.getName()).log(Level.SEVERE, null, ex);
+        } // catch
     } // life
 
 } // class ReceivingProcess

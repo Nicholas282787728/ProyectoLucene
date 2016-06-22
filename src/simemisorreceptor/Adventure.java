@@ -14,6 +14,10 @@ import cz.zcu.fav.kiv.jsim.JSimSystem;
 import cz.zcu.fav.kiv.jsim.JSimTooManyProcessesException;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessage;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessageBox;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -43,6 +47,7 @@ public class Adventure extends JSimProcess
                 int inicio = SimEmisorReceptor.getTiempo();
                 myReview Adventure = SimEmisorReceptor.objetoFecha(2, inicio);
                 
+                FileWriter file = new FileWriter("files/output/ranking/adventure.csv");
                 while (true)
                 {
                     inicio = Adventure.getFecha();
@@ -54,10 +59,18 @@ public class Adventure extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Adventure)))
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Adventure))){
                             message(inicio+" Ranking acumulado Adventure: "+SimEmisorReceptor.getT2());
+                            file.write(SimEmisorReceptor.FormatoFecha(inicio)+","+SimEmisorReceptor.getT2()+"\n");
+                        }
 
-                        SimEmisorReceptor.setT2(SimEmisorReceptor.formulaRanking(Adventure)+SimEmisorReceptor.getT2()-SimEmisorReceptor.enfria);
+                        double ranking = SimEmisorReceptor.formulaRanking(Adventure)+SimEmisorReceptor.getT2()-SimEmisorReceptor.enfria;
+                        if(ranking > 0.0){
+                            SimEmisorReceptor.setT2(ranking);
+                        }
+                        else{
+                            SimEmisorReceptor.setT2(0.0);
+                        }
 
                         Adventure = SimEmisorReceptor.objetoFecha(2, SimEmisorReceptor.getTiempo());
 
@@ -88,7 +101,9 @@ public class Adventure extends JSimProcess
             {
                 e.printStackTrace();
                 e.printComment(System.err);
-            } // catch
+            } catch (IOException ex) {
+            Logger.getLogger(Adventure.class.getName()).log(Level.SEVERE, null, ex);
+        } // catch
     } // life
 
 } // class ReceivingProcess

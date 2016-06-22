@@ -14,6 +14,10 @@ import cz.zcu.fav.kiv.jsim.JSimSystem;
 import cz.zcu.fav.kiv.jsim.JSimTooManyProcessesException;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessage;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessageBox;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -43,6 +47,7 @@ public class Thriller extends JSimProcess
                 int inicio = SimEmisorReceptor.getTiempo();
                 myReview Thriller = SimEmisorReceptor.objetoFecha(20, inicio);
                 
+                FileWriter file = new FileWriter("files/output/ranking/thriller.csv");
                 while (true)
                 {           
                     inicio = Thriller.getFecha();
@@ -53,10 +58,18 @@ public class Thriller extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Thriller)))
-                            message(inicio+" Ranking acumulado Thriller: "+SimEmisorReceptor.getT20());
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Thriller))){
+                            message(inicio+" Ranking acumulado Adventure: "+SimEmisorReceptor.getT20());
+                            file.write(SimEmisorReceptor.FormatoFecha(inicio)+","+SimEmisorReceptor.getT20()+"\n");
+                        }
 
-                        SimEmisorReceptor.setT20(SimEmisorReceptor.formulaRanking(Thriller)+SimEmisorReceptor.getT20()-SimEmisorReceptor.enfria);
+                        double ranking = SimEmisorReceptor.formulaRanking(Thriller)+SimEmisorReceptor.getT20()-SimEmisorReceptor.enfria;
+                        if(ranking > 0.0){
+                            SimEmisorReceptor.setT20(ranking);
+                        }
+                        else{
+                            SimEmisorReceptor.setT20(0.0);
+                        }
 
                         Thriller = SimEmisorReceptor.objetoFecha(20, SimEmisorReceptor.getTiempo());
 
@@ -87,7 +100,9 @@ public class Thriller extends JSimProcess
             {
                 e.printStackTrace();
                 e.printComment(System.err);
-            } // catch
+            } catch (IOException ex) {
+            Logger.getLogger(Thriller.class.getName()).log(Level.SEVERE, null, ex);
+        } // catch
     } // life
 
 } // class ReceivingProcess

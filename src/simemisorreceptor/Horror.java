@@ -14,6 +14,10 @@ import cz.zcu.fav.kiv.jsim.JSimSystem;
 import cz.zcu.fav.kiv.jsim.JSimTooManyProcessesException;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessage;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessageBox;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -43,6 +47,7 @@ public class Horror extends JSimProcess
                 int inicio = SimEmisorReceptor.getTiempo();
                 myReview Horror = SimEmisorReceptor.objetoFecha(13, inicio);
                 
+                FileWriter file = new FileWriter("files/output/ranking/horror.csv");
                 while (true)
                 {
                     inicio = Horror.getFecha();
@@ -53,10 +58,18 @@ public class Horror extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Horror)))
-                            message(inicio+" Ranking acumulado Horror: "+SimEmisorReceptor.getT13());
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Horror))){
+                            message(inicio+" Ranking acumulado Adventure: "+SimEmisorReceptor.getT13());
+                            file.write(SimEmisorReceptor.FormatoFecha(inicio)+","+SimEmisorReceptor.getT13()+"\n");
+                        }
 
-                        SimEmisorReceptor.setT13(SimEmisorReceptor.formulaRanking(Horror)+SimEmisorReceptor.getT13()-SimEmisorReceptor.enfria);
+                        double ranking = SimEmisorReceptor.formulaRanking(Horror)+SimEmisorReceptor.getT13()-SimEmisorReceptor.enfria;
+                        if(ranking > 0.0){
+                            SimEmisorReceptor.setT13(ranking);
+                        }
+                        else{
+                            SimEmisorReceptor.setT13(0.0);
+                        }
 
                         Horror = SimEmisorReceptor.objetoFecha(13, SimEmisorReceptor.getTiempo());
 
@@ -86,7 +99,9 @@ public class Horror extends JSimProcess
             {
                 e.printStackTrace();
                 e.printComment(System.err);
-            } // catch
+            } catch (IOException ex) {
+            Logger.getLogger(Horror.class.getName()).log(Level.SEVERE, null, ex);
+        } // catch
     } // life
 
 } // class ReceivingProcess

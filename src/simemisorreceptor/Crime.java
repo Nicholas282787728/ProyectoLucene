@@ -14,6 +14,10 @@ import cz.zcu.fav.kiv.jsim.JSimSystem;
 import cz.zcu.fav.kiv.jsim.JSimTooManyProcessesException;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessage;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessageBox;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -43,6 +47,7 @@ public class Crime extends JSimProcess
                 int inicio = SimEmisorReceptor.getTiempo();
                 myReview Crime = SimEmisorReceptor.objetoFecha(6, inicio);
                 
+                FileWriter file = new FileWriter("files/output/ranking/crime.csv");
                 while (true)
                 {
                     inicio = Crime.getFecha();
@@ -55,10 +60,18 @@ public class Crime extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Crime)))
-                            message(inicio+" Ranking acumulado Crime: "+SimEmisorReceptor.getT6());
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Crime))){
+                            message(inicio+" Ranking acumulado Biography: "+SimEmisorReceptor.getT6());
+                            file.write(SimEmisorReceptor.FormatoFecha(inicio)+","+SimEmisorReceptor.getT6()+"\n");
+                        }
 
-                        SimEmisorReceptor.setT6(SimEmisorReceptor.formulaRanking(Crime)+SimEmisorReceptor.getT6()-SimEmisorReceptor.enfria);
+                        double ranking = SimEmisorReceptor.formulaRanking(Crime)+SimEmisorReceptor.getT6()-SimEmisorReceptor.enfria;
+                        if(ranking > 0.0){
+                            SimEmisorReceptor.setT6(ranking);
+                        }
+                        else{
+                            SimEmisorReceptor.setT6(0.0);
+                        }
 
                         Crime = SimEmisorReceptor.objetoFecha(6, SimEmisorReceptor.getTiempo());
 
@@ -88,7 +101,9 @@ public class Crime extends JSimProcess
             {
                 e.printStackTrace();
                 e.printComment(System.err);
-            } // catch
+            } catch (IOException ex) {
+            Logger.getLogger(Crime.class.getName()).log(Level.SEVERE, null, ex);
+        } // catch
     } // life
 
 } // class ReceivingProcess

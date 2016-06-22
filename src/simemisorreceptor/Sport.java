@@ -14,6 +14,10 @@ import cz.zcu.fav.kiv.jsim.JSimSystem;
 import cz.zcu.fav.kiv.jsim.JSimTooManyProcessesException;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessage;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessageBox;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -43,6 +47,7 @@ public class Sport extends JSimProcess
                 int inicio = SimEmisorReceptor.getTiempo();
                 myReview Sport = SimEmisorReceptor.objetoFecha(19, inicio);
                 
+                FileWriter file = new FileWriter("files/output/ranking/sport.csv");
                 while (true)
                 {                 
                     inicio = Sport.getFecha();
@@ -53,10 +58,18 @@ public class Sport extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Sport)))
-                            message(inicio+" Ranking acumulado Sport: "+SimEmisorReceptor.getT19());
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Sport))){
+                            message(inicio+" Ranking acumulado Adventure: "+SimEmisorReceptor.getT19());
+                            file.write(SimEmisorReceptor.FormatoFecha(inicio)+","+SimEmisorReceptor.getT19()+"\n");
+                        }
 
-                        SimEmisorReceptor.setT19(SimEmisorReceptor.formulaRanking(Sport)+SimEmisorReceptor.getT19()-SimEmisorReceptor.enfria);
+                        double ranking = SimEmisorReceptor.formulaRanking(Sport)+SimEmisorReceptor.getT19()-SimEmisorReceptor.enfria;
+                        if(ranking > 0.0){
+                            SimEmisorReceptor.setT19(ranking);
+                        }
+                        else{
+                            SimEmisorReceptor.setT19(0.0);
+                        }
 
                         Sport = SimEmisorReceptor.objetoFecha(19, SimEmisorReceptor.getTiempo());
 
@@ -86,7 +99,9 @@ public class Sport extends JSimProcess
             {
                 e.printStackTrace();
                 e.printComment(System.err);
-            } // catch
+            } catch (IOException ex) {
+            Logger.getLogger(Sport.class.getName()).log(Level.SEVERE, null, ex);
+        } // catch
     } // life
 
 } // class ReceivingProcess

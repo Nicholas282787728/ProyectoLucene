@@ -14,6 +14,10 @@ import cz.zcu.fav.kiv.jsim.JSimSystem;
 import cz.zcu.fav.kiv.jsim.JSimTooManyProcessesException;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessage;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessageBox;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -43,6 +47,7 @@ public class Comedy extends JSimProcess
                 int inicio = SimEmisorReceptor.getTiempo();
                 myReview Comedy = SimEmisorReceptor.objetoFecha(5, inicio);
                 
+                FileWriter file = new FileWriter("files/output/ranking/comedy.csv");
                 while (true)
                 {
                     inicio = Comedy.getFecha();
@@ -56,10 +61,18 @@ public class Comedy extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Comedy)))
-                            message(inicio+" Ranking acumulado Comedy: "+SimEmisorReceptor.getT5());
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Comedy))){
+                            message(inicio+" Ranking acumulado Biography: "+SimEmisorReceptor.getT5());
+                            file.write(SimEmisorReceptor.FormatoFecha(inicio)+","+SimEmisorReceptor.getT5()+"\n");
+                        }
 
-                        SimEmisorReceptor.setT5(SimEmisorReceptor.formulaRanking(Comedy)+SimEmisorReceptor.getT5()-SimEmisorReceptor.enfria);
+                        double ranking = SimEmisorReceptor.formulaRanking(Comedy)+SimEmisorReceptor.getT5()-SimEmisorReceptor.enfria;
+                        if(ranking > 0.0){
+                            SimEmisorReceptor.setT5(ranking);
+                        }
+                        else{
+                            SimEmisorReceptor.setT5(0.0);
+                        }
 
                         Comedy = SimEmisorReceptor.objetoFecha(5, SimEmisorReceptor.getTiempo());
 
@@ -94,7 +107,9 @@ public class Comedy extends JSimProcess
             {
                 e.printStackTrace();
                 e.printComment(System.err);
-            } // catch
+            } catch (IOException ex) {
+            Logger.getLogger(Comedy.class.getName()).log(Level.SEVERE, null, ex);
+        } // catch
     } // life
 
 } // class ReceivingProcess

@@ -14,6 +14,10 @@ import cz.zcu.fav.kiv.jsim.JSimSystem;
 import cz.zcu.fav.kiv.jsim.JSimTooManyProcessesException;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessage;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessageBox;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -43,6 +47,7 @@ public class Romance extends JSimProcess
                 int inicio = SimEmisorReceptor.getTiempo();
                 myReview Romance = SimEmisorReceptor.objetoFecha(17, inicio);
                 
+                FileWriter file = new FileWriter("files/output/ranking/romance.csv");
                 while (true)
                 {
                     inicio = Romance.getFecha();
@@ -54,10 +59,18 @@ public class Romance extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Romance)))
-                            message(inicio+" Ranking acumulado Romance: "+SimEmisorReceptor.getT17());
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Romance))){
+                            message(inicio+" Ranking acumulado Adventure: "+SimEmisorReceptor.getT17());
+                            file.write(SimEmisorReceptor.FormatoFecha(inicio)+","+SimEmisorReceptor.getT17()+"\n");
+                        }
 
-                        SimEmisorReceptor.setT17(SimEmisorReceptor.formulaRanking(Romance)+SimEmisorReceptor.getT17()-SimEmisorReceptor.enfria);
+                        double ranking = SimEmisorReceptor.formulaRanking(Romance)+SimEmisorReceptor.getT17()-SimEmisorReceptor.enfria;
+                        if(ranking > 0.0){
+                            SimEmisorReceptor.setT17(ranking);
+                        }
+                        else{
+                            SimEmisorReceptor.setT17(0.0);
+                        }
 
                         Romance = SimEmisorReceptor.objetoFecha(17, SimEmisorReceptor.getTiempo());
 
@@ -88,7 +101,9 @@ public class Romance extends JSimProcess
             {
                 e.printStackTrace();
                 e.printComment(System.err);
-            } // catch
+            } catch (IOException ex) {
+            Logger.getLogger(Romance.class.getName()).log(Level.SEVERE, null, ex);
+        } // catch
     } // life
 
 } // class ReceivingProcess

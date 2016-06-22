@@ -14,6 +14,10 @@ import cz.zcu.fav.kiv.jsim.JSimSystem;
 import cz.zcu.fav.kiv.jsim.JSimTooManyProcessesException;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessage;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessageBox;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -43,6 +47,7 @@ public class Western extends JSimProcess
                 int inicio = SimEmisorReceptor.getTiempo();
                 myReview Western = SimEmisorReceptor.objetoFecha(22, inicio);
                 
+                FileWriter file = new FileWriter("files/output/ranking/western.csv");
                 while (true)
                 {                  
                     inicio = Western.getFecha();
@@ -53,10 +58,18 @@ public class Western extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Western)))
-                            message(inicio+" Ranking acumulado Western: "+SimEmisorReceptor.getT22());
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Western))){
+                            message(inicio+" Ranking acumulado Adventure: "+SimEmisorReceptor.getT22());
+                            file.write(SimEmisorReceptor.FormatoFecha(inicio)+","+SimEmisorReceptor.getT22()+"\n");
+                        }
 
-                        SimEmisorReceptor.setT22(SimEmisorReceptor.formulaRanking(Western)+SimEmisorReceptor.getT22()-SimEmisorReceptor.enfria);
+                        double ranking = SimEmisorReceptor.formulaRanking(Western)+SimEmisorReceptor.getT22()-SimEmisorReceptor.enfria;
+                        if(ranking > 0.0){
+                            SimEmisorReceptor.setT22(ranking);
+                        }
+                        else{
+                            SimEmisorReceptor.setT22(0.0);
+                        }
 
                         Western = SimEmisorReceptor.objetoFecha(22, SimEmisorReceptor.getTiempo());
 
@@ -87,7 +100,9 @@ public class Western extends JSimProcess
             {
                 e.printStackTrace();
                 e.printComment(System.err);
-            } // catch
+            } catch (IOException ex) {
+            Logger.getLogger(Western.class.getName()).log(Level.SEVERE, null, ex);
+        } // catch
     } // life
 
 } // class ReceivingProcess

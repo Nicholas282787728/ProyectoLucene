@@ -14,6 +14,10 @@ import cz.zcu.fav.kiv.jsim.JSimSystem;
 import cz.zcu.fav.kiv.jsim.JSimTooManyProcessesException;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessage;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessageBox;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -43,6 +47,7 @@ public class Musical extends JSimProcess
                 int inicio = SimEmisorReceptor.getTiempo();
                 myReview Musical = SimEmisorReceptor.objetoFecha(15, inicio);
                 
+                FileWriter file = new FileWriter("files/output/ranking/musical.csv");
                 while (true)
                 {
                     inicio = Musical.getFecha();
@@ -53,10 +58,18 @@ public class Musical extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Musical)))
-                            message(inicio+" Ranking acumulado Musical: "+SimEmisorReceptor.getT15());
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Musical))){
+                            message(inicio+" Ranking acumulado Adventure: "+SimEmisorReceptor.getT15());
+                            file.write(SimEmisorReceptor.FormatoFecha(inicio)+","+SimEmisorReceptor.getT15()+"\n");
+                        }
 
-                        SimEmisorReceptor.setT15(SimEmisorReceptor.formulaRanking(Musical)+SimEmisorReceptor.getT15()-SimEmisorReceptor.enfria);
+                        double ranking = SimEmisorReceptor.formulaRanking(Musical)+SimEmisorReceptor.getT15()-SimEmisorReceptor.enfria;
+                        if(ranking > 0.0){
+                            SimEmisorReceptor.setT15(ranking);
+                        }
+                        else{
+                            SimEmisorReceptor.setT15(0.0);
+                        }
 
                         Musical = SimEmisorReceptor.objetoFecha(15, SimEmisorReceptor.getTiempo());
 
@@ -86,7 +99,9 @@ public class Musical extends JSimProcess
             {
                 e.printStackTrace();
                 e.printComment(System.err);
-            } // catch
+            } catch (IOException ex) {
+            Logger.getLogger(Musical.class.getName()).log(Level.SEVERE, null, ex);
+        } // catch
     } // life
 
 } // class ReceivingProcess

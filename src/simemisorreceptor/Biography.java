@@ -14,6 +14,10 @@ import cz.zcu.fav.kiv.jsim.JSimSystem;
 import cz.zcu.fav.kiv.jsim.JSimTooManyProcessesException;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessage;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessageBox;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -43,6 +47,7 @@ public class Biography extends JSimProcess
                 int inicio = SimEmisorReceptor.getTiempo();
                 myReview Biography = SimEmisorReceptor.objetoFecha(4, inicio);
                 
+                FileWriter file = new FileWriter("files/output/ranking/biography.csv");
                 while (true)
                 {
                     inicio = Biography.getFecha();
@@ -55,10 +60,18 @@ public class Biography extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Biography)))
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Biography))){
                             message(inicio+" Ranking acumulado Biography: "+SimEmisorReceptor.getT4());
-
-                        SimEmisorReceptor.setT4(SimEmisorReceptor.formulaRanking(Biography)+SimEmisorReceptor.getT4()-SimEmisorReceptor.enfria);
+                            file.write(SimEmisorReceptor.FormatoFecha(inicio)+","+SimEmisorReceptor.getT4()+"\n");
+                        }
+                            
+                        double ranking = SimEmisorReceptor.formulaRanking(Biography)+SimEmisorReceptor.getT4()-SimEmisorReceptor.enfria;
+                        if(ranking > 0.0){
+                            SimEmisorReceptor.setT4(ranking);
+                        }
+                        else{
+                            SimEmisorReceptor.setT4(0.0);
+                        }
 
                         Biography = SimEmisorReceptor.objetoFecha(4, SimEmisorReceptor.getTiempo());
 
@@ -89,7 +102,9 @@ public class Biography extends JSimProcess
             {
                 e.printStackTrace();
                 e.printComment(System.err);
-            } // catch
+            } catch (IOException ex) {
+            Logger.getLogger(Biography.class.getName()).log(Level.SEVERE, null, ex);
+        } // catch
     } // life
 
 } // class ReceivingProcess

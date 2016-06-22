@@ -14,6 +14,10 @@ import cz.zcu.fav.kiv.jsim.JSimSystem;
 import cz.zcu.fav.kiv.jsim.JSimTooManyProcessesException;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessage;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessageBox;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -43,6 +47,7 @@ public class Documentary extends JSimProcess
                 int inicio = SimEmisorReceptor.getTiempo();
                 myReview Documentary = SimEmisorReceptor.objetoFecha(7, inicio);
                 
+                FileWriter file = new FileWriter("files/output/ranking/documentary.csv");
                 while (true)
                 {
                     inicio = Documentary.getFecha();
@@ -55,10 +60,18 @@ public class Documentary extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Documentary)))
-                            message(inicio+" Ranking acumulado Documentary: "+SimEmisorReceptor.getT7());
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Documentary))){
+                            message(inicio+" Ranking acumulado Biography: "+SimEmisorReceptor.getT7());
+                            file.write(SimEmisorReceptor.FormatoFecha(inicio)+","+SimEmisorReceptor.getT7()+"\n");
+                        }
 
-                        SimEmisorReceptor.setT7(SimEmisorReceptor.formulaRanking(Documentary)+SimEmisorReceptor.getT7()-SimEmisorReceptor.enfria);
+                        double ranking = SimEmisorReceptor.formulaRanking(Documentary)+SimEmisorReceptor.getT7()-SimEmisorReceptor.enfria;
+                        if(ranking > 0.0){
+                            SimEmisorReceptor.setT7(ranking);
+                        }
+                        else{
+                            SimEmisorReceptor.setT7(0.0);
+                        }
 
                         Documentary = SimEmisorReceptor.objetoFecha(7, SimEmisorReceptor.getTiempo());
 
@@ -103,7 +116,9 @@ public class Documentary extends JSimProcess
             {
                 e.printStackTrace();
                 e.printComment(System.err);
-            } // catch
+            } catch (IOException ex) {
+            Logger.getLogger(Documentary.class.getName()).log(Level.SEVERE, null, ex);
+        } // catch
     } // life
 
 } // class ReceivingProcess

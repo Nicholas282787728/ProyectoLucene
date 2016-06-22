@@ -14,6 +14,10 @@ import cz.zcu.fav.kiv.jsim.JSimSystem;
 import cz.zcu.fav.kiv.jsim.JSimTooManyProcessesException;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessage;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessageBox;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -43,6 +47,7 @@ public class Mystery extends JSimProcess
                 int inicio = SimEmisorReceptor.getTiempo();
                 myReview Mystery = SimEmisorReceptor.objetoFecha(16, inicio);
                 
+                FileWriter file = new FileWriter("files/output/ranking/mystery.csv");
                 while (true)
                 {
                     inicio = Mystery.getFecha();
@@ -53,10 +58,18 @@ public class Mystery extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Mystery)))
-                            message(inicio+" Ranking acumulado Mystery: "+SimEmisorReceptor.getT16());
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Mystery))){
+                            message(inicio+" Ranking acumulado Adventure: "+SimEmisorReceptor.getT16());
+                            file.write(SimEmisorReceptor.FormatoFecha(inicio)+","+SimEmisorReceptor.getT16()+"\n");
+                        }
 
-                        SimEmisorReceptor.setT16(SimEmisorReceptor.formulaRanking(Mystery)+SimEmisorReceptor.getT16()-SimEmisorReceptor.enfria);
+                        double ranking = SimEmisorReceptor.formulaRanking(Mystery)+SimEmisorReceptor.getT16()-SimEmisorReceptor.enfria;
+                        if(ranking > 0.0){
+                            SimEmisorReceptor.setT16(ranking);
+                        }
+                        else{
+                            SimEmisorReceptor.setT16(0.0);
+                        }
 
                         Mystery = SimEmisorReceptor.objetoFecha(16, SimEmisorReceptor.getTiempo());
 
@@ -86,7 +99,9 @@ public class Mystery extends JSimProcess
             {
                 e.printStackTrace();
                 e.printComment(System.err);
-            } // catch
+            } catch (IOException ex) {
+            Logger.getLogger(Mystery.class.getName()).log(Level.SEVERE, null, ex);
+        } // catch
     } // life
 
 } // class ReceivingProcess

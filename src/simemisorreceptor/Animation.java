@@ -14,6 +14,10 @@ import cz.zcu.fav.kiv.jsim.JSimSystem;
 import cz.zcu.fav.kiv.jsim.JSimTooManyProcessesException;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessage;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessageBox;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -43,6 +47,7 @@ public class Animation extends JSimProcess
                 int inicio = SimEmisorReceptor.getTiempo();
                 myReview Animation = SimEmisorReceptor.objetoFecha(3, inicio);
                 
+                FileWriter file = new FileWriter("files/output/ranking/animation.csv");
                 while (true)
                 {
                     inicio = Animation.getFecha();
@@ -54,10 +59,18 @@ public class Animation extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Animation)))
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Animation))){
                             message(inicio+" Ranking acumulado Animation: "+SimEmisorReceptor.getT3());
+                            file.write(SimEmisorReceptor.FormatoFecha(inicio)+","+SimEmisorReceptor.getT3()+"\n");
+                        }
 
-                        SimEmisorReceptor.setT3(SimEmisorReceptor.formulaRanking(Animation)+SimEmisorReceptor.getT3()-SimEmisorReceptor.enfria);
+                        double ranking = SimEmisorReceptor.formulaRanking(Animation)+SimEmisorReceptor.getT3()-SimEmisorReceptor.enfria;
+                        if(ranking > 0.0){
+                            SimEmisorReceptor.setT3(ranking);
+                        }
+                        else{
+                            SimEmisorReceptor.setT3(0.0);
+                        }
 
                         Animation = SimEmisorReceptor.objetoFecha(3, SimEmisorReceptor.getTiempo());
 
@@ -101,7 +114,9 @@ public class Animation extends JSimProcess
             {
                 e.printStackTrace();
                 e.printComment(System.err);
-            } // catch
+            } catch (IOException ex) {
+            Logger.getLogger(Animation.class.getName()).log(Level.SEVERE, null, ex);
+        } // catch
     } // life
 
 } // class ReceivingProcess

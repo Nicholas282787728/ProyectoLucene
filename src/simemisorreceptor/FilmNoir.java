@@ -14,6 +14,10 @@ import cz.zcu.fav.kiv.jsim.JSimSystem;
 import cz.zcu.fav.kiv.jsim.JSimTooManyProcessesException;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessage;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessageBox;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -43,6 +47,7 @@ public class FilmNoir extends JSimProcess
                 int inicio = SimEmisorReceptor.getTiempo();
                 myReview FilmNoir = SimEmisorReceptor.objetoFecha(11, inicio);
                 
+                FileWriter file = new FileWriter("files/output/ranking/film_noir.csv");
                 while (true)
                 {                 
                     inicio = FilmNoir.getFecha();
@@ -53,10 +58,18 @@ public class FilmNoir extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(FilmNoir)))
-                            message(inicio+" Ranking acumulado FilmNoir: "+SimEmisorReceptor.getT11());
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(FilmNoir))){
+                            message(inicio+" Ranking acumulado Biography: "+SimEmisorReceptor.getT11());
+                            file.write(SimEmisorReceptor.FormatoFecha(inicio)+","+SimEmisorReceptor.getT11()+"\n");
+                        }
 
-                        SimEmisorReceptor.setT11(SimEmisorReceptor.formulaRanking(FilmNoir)+SimEmisorReceptor.getT11()-SimEmisorReceptor.enfria);
+                        double ranking = SimEmisorReceptor.formulaRanking(FilmNoir)+SimEmisorReceptor.getT11()-SimEmisorReceptor.enfria;
+                        if(ranking > 0.0){
+                            SimEmisorReceptor.setT11(ranking);
+                        }
+                        else{
+                            SimEmisorReceptor.setT11(0.0);
+                        }
 
                         FilmNoir = SimEmisorReceptor.objetoFecha(11, SimEmisorReceptor.getTiempo());
 
@@ -86,7 +99,9 @@ public class FilmNoir extends JSimProcess
             {
                 e.printStackTrace();
                 e.printComment(System.err);
-            } // catch
+            } catch (IOException ex) {
+            Logger.getLogger(FilmNoir.class.getName()).log(Level.SEVERE, null, ex);
+        } // catch
     } // life
 
 } // class ReceivingProcess

@@ -14,6 +14,10 @@ import cz.zcu.fav.kiv.jsim.JSimSystem;
 import cz.zcu.fav.kiv.jsim.JSimTooManyProcessesException;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessage;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessageBox;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -43,6 +47,7 @@ public class SciFi extends JSimProcess
                 int inicio = SimEmisorReceptor.getTiempo();
                 myReview SciFi = SimEmisorReceptor.objetoFecha(18, inicio);
                 
+                FileWriter file = new FileWriter("files/output/ranking/sci_fi.csv");
                 while (true)
                 {         
                     inicio = SciFi.getFecha();
@@ -54,10 +59,18 @@ public class SciFi extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(SciFi)))
-                            message(inicio+" Ranking acumulado SciFi: "+SimEmisorReceptor.getT18());
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(SciFi))){
+                            message(inicio+" Ranking acumulado Adventure: "+SimEmisorReceptor.getT18());
+                            file.write(SimEmisorReceptor.FormatoFecha(inicio)+","+SimEmisorReceptor.getT18()+"\n");
+                        }
 
-                        SimEmisorReceptor.setT18(SimEmisorReceptor.formulaRanking(SciFi)+SimEmisorReceptor.getT18()-SimEmisorReceptor.enfria);
+                        double ranking = SimEmisorReceptor.formulaRanking(SciFi)+SimEmisorReceptor.getT18()-SimEmisorReceptor.enfria;
+                        if(ranking > 0.0){
+                            SimEmisorReceptor.setT18(ranking);
+                        }
+                        else{
+                            SimEmisorReceptor.setT18(0.0);
+                        }
 
                         SciFi = SimEmisorReceptor.objetoFecha(18, SimEmisorReceptor.getTiempo());
 
@@ -88,7 +101,9 @@ public class SciFi extends JSimProcess
             {
                 e.printStackTrace();
                 e.printComment(System.err);
-            } // catch
+            } catch (IOException ex) {
+            Logger.getLogger(SciFi.class.getName()).log(Level.SEVERE, null, ex);
+        } // catch
     } // life
 
 } // class ReceivingProcess

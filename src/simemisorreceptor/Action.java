@@ -14,6 +14,10 @@ import cz.zcu.fav.kiv.jsim.JSimSystem;
 import cz.zcu.fav.kiv.jsim.JSimTooManyProcessesException;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessage;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessageBox;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -42,6 +46,8 @@ public class Action extends JSimProcess
             {
                 int inicio = SimEmisorReceptor.getTiempo();
                 myReview Action = SimEmisorReceptor.objetoFecha(1, inicio);
+                
+                FileWriter file = new FileWriter("files/output/ranking/action.csv");
                 while (true)
                 {             
                     
@@ -53,13 +59,21 @@ public class Action extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Action)))
-                            message("Ranking anterior Accion: "+SimEmisorReceptor.formulaRanking(Action));
-                        
-                        SimEmisorReceptor.setT1(SimEmisorReceptor.formulaRanking(Action)+SimEmisorReceptor.getT1()-0.01);
-                        
-                        
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Action))){
+                            message(inicio+" Ranking acumulado Adventure: "+SimEmisorReceptor.getT1());
+                            file.write(SimEmisorReceptor.FormatoFecha(inicio)+","+SimEmisorReceptor.getT1()+"\n");
+                        }
+                        double ranking = SimEmisorReceptor.formulaRanking(Action)+SimEmisorReceptor.getT1()-SimEmisorReceptor.enfria;
+                        if(ranking > 0.0){
+                            SimEmisorReceptor.setT1(ranking);
+                        }
+                        else{
+                            SimEmisorReceptor.setT1(0.0);
+                        }
+
                         Action = SimEmisorReceptor.objetoFecha(1, SimEmisorReceptor.getTiempo());
+
+                        Action.setRanking(SimEmisorReceptor.getT1());
                     }
                     
                     if (mensaje == null){
@@ -88,6 +102,8 @@ public class Action extends JSimProcess
             {
                 e.printStackTrace();
                 e.printComment(System.err);
+            } catch (IOException ex) {
+                Logger.getLogger(Action.class.getName()).log(Level.SEVERE, null, ex);
             } // catch
 	} // life
 

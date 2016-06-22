@@ -65,6 +65,7 @@ public class Reader {
         clean = clean.replace("-", "");
         clean = clean.replace("^", "");
         clean = clean.replace("~", "");
+        clean = clean.replace("\\u001a", "");
         return clean;
     }
     
@@ -116,6 +117,11 @@ public class Reader {
         Query query;
         Review nullReview = new Review();
         try {
+            //If para parchar el error de la fecha 21 Enero 2015
+            if(date.equals("20150122")){
+                //wordQuery = wordQuery.substring(7, wordQuery.length());
+                System.out.println(">>>>>>>>WORD QUERY: "+wordQuery);
+            }
             query = parser.parse("date: \"+" + date + "\" AND " + cleanInput(wordQuery));
             ScoreDoc[] hits = indexSearcher.search(query, 60).scoreDocs;
             
@@ -123,8 +129,7 @@ public class Reader {
                  //System.out.println("[Search] No se han encontrado coincidencias.");
             } 
             else {
-                //System.out.println("[Search] Se han encontrado: " + hits.length + " coincidencias.");
-                
+                System.out.println("[Search] Dia " + date + ": Se han encontrado: " + hits.length + " coincidencias.");
                 for (ScoreDoc hit : hits) {
                     Document hitDoc = indexSearcher.doc(hit.doc);
                     
@@ -276,7 +281,19 @@ public class Reader {
                                            clasif2)
                                 );
 
-                    
+                    /*
+                    if(nullReview.convertDate(date) == 20150121){
+                        if(hitDoc.get("review").substring(0, 1).equals(" ")){
+                            System.out.println(">>>>>>>> EL error es un espacio");
+                        }
+                        System.out.println(">>>>>>>REVIEW CON ERROR: "+Integer.parseInt(hitDoc.get("date")) + 
+                                           hitDoc.get("review") +
+                                           Double.parseDouble(hitDoc.get("score")) + 
+                                           Arrays.toString(hitDoc.get("genre").split(", ")) + 
+                                           Arrays.toString(clasif1) + 
+                                           Arrays.toString(clasif2));
+                    }
+                    */
                 }
             }
             

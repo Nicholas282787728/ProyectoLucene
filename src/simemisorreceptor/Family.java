@@ -14,6 +14,10 @@ import cz.zcu.fav.kiv.jsim.JSimSystem;
 import cz.zcu.fav.kiv.jsim.JSimTooManyProcessesException;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessage;
 import cz.zcu.fav.kiv.jsim.ipc.JSimMessageBox;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -43,6 +47,7 @@ public class Family extends JSimProcess
                 int inicio = SimEmisorReceptor.getTiempo();
                 myReview Family = SimEmisorReceptor.objetoFecha(9, inicio);
                 
+                FileWriter file = new FileWriter("files/output/ranking/family.csv");
                 while (true)
                 {
                     inicio = Family.getFecha();
@@ -55,10 +60,18 @@ public class Family extends JSimProcess
                         /****************************************
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
-                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Family)))
-                            message(inicio+" Ranking acumulado Family: "+SimEmisorReceptor.getT9());
+                        if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Family))){
+                            message(inicio+" Ranking acumulado Biography: "+SimEmisorReceptor.getT9());
+                            file.write(SimEmisorReceptor.FormatoFecha(inicio)+","+SimEmisorReceptor.getT9()+"\n");
+                        }
 
-                        SimEmisorReceptor.setT9(SimEmisorReceptor.formulaRanking(Family)+SimEmisorReceptor.getT9()-SimEmisorReceptor.enfria);
+                        double ranking = SimEmisorReceptor.formulaRanking(Family)+SimEmisorReceptor.getT9()-SimEmisorReceptor.enfria;
+                        if(ranking > 0.0){
+                            SimEmisorReceptor.setT9(ranking);
+                        }
+                        else{
+                            SimEmisorReceptor.setT9(0.0);
+                        }
 
                         Family = SimEmisorReceptor.objetoFecha(9, SimEmisorReceptor.getTiempo());
 
@@ -93,7 +106,9 @@ public class Family extends JSimProcess
             {
                 e.printStackTrace();
                 e.printComment(System.err);
-            } // catch
+            } catch (IOException ex) {
+            Logger.getLogger(Family.class.getName()).log(Level.SEVERE, null, ex);
+        } // catch
     } // life
 
 } // class ReceivingProcess
