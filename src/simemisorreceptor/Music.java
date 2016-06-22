@@ -45,7 +45,7 @@ public class Music extends JSimProcess
                 
                 while (true)
                 {
-                    
+                    inicio = Music.getFecha();
                     message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< leyendo bandeja mensajes de entrada <<");
                     mensaje = receiveMessageWithoutBlocking(box14);
                     if(inicio != SimEmisorReceptor.getTiempo()){
@@ -54,10 +54,13 @@ public class Music extends JSimProcess
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
                         if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Music)))
-                            message("Ranking anterior Musica: "+SimEmisorReceptor.formulaRanking(Music));
-                        SimEmisorReceptor.setT14(SimEmisorReceptor.formulaRanking(Music)+SimEmisorReceptor.getT14()-0.01);
-                        
+                            message(inicio+" Ranking acumulado Music: "+SimEmisorReceptor.getT14());
+
+                        SimEmisorReceptor.setT14(SimEmisorReceptor.formulaRanking(Music)+SimEmisorReceptor.getT14()-SimEmisorReceptor.enfria);
+
                         Music = SimEmisorReceptor.objetoFecha(14, SimEmisorReceptor.getTiempo());
+
+                        Music.setRanking(SimEmisorReceptor.getT14());
                     }
                     
                     if (mensaje == null){

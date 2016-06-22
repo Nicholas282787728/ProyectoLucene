@@ -44,7 +44,8 @@ public class War extends JSimProcess
                 myReview War = SimEmisorReceptor.objetoFecha(21, inicio);
                 
                 while (true)
-                {                    
+                {            
+                    inicio = War.getFecha();
                     message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< leyendo bandeja mensajes de entrada <<");
                     mensaje = receiveMessageWithoutBlocking(box21);
                     if(inicio != SimEmisorReceptor.getTiempo()){
@@ -53,10 +54,13 @@ public class War extends JSimProcess
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
                         if(!Double.isNaN(SimEmisorReceptor.formulaRanking(War)))
-                            message("Ranking anterior Guerra: "+SimEmisorReceptor.formulaRanking(War));
-                        SimEmisorReceptor.setT21(SimEmisorReceptor.formulaRanking(War)+SimEmisorReceptor.getT21()-0.01);
-                        
+                            message(inicio+" Ranking acumulado War: "+SimEmisorReceptor.getT21());
+
+                        SimEmisorReceptor.setT21(SimEmisorReceptor.formulaRanking(War)+SimEmisorReceptor.getT21()-SimEmisorReceptor.enfria);
+
                         War = SimEmisorReceptor.objetoFecha(21, SimEmisorReceptor.getTiempo());
+
+                        War.setRanking(SimEmisorReceptor.getT21());
                     }
                     if (mensaje == null){
                         message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< bandeja vacia <<");

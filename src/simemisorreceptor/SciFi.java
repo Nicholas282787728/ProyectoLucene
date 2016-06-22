@@ -44,7 +44,8 @@ public class SciFi extends JSimProcess
                 myReview SciFi = SimEmisorReceptor.objetoFecha(18, inicio);
                 
                 while (true)
-                {                    
+                {         
+                    inicio = SciFi.getFecha();
                     message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< leyendo bandeja mensajes de entrada <<");
                     mensaje = receiveMessageWithoutBlocking(box18);
                     
@@ -54,10 +55,13 @@ public class SciFi extends JSimProcess
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
                         if(!Double.isNaN(SimEmisorReceptor.formulaRanking(SciFi)))
-                            message("Ranking anterior CienciaFiccion: "+SimEmisorReceptor.formulaRanking(SciFi));
-                        SimEmisorReceptor.setT18(SimEmisorReceptor.formulaRanking(SciFi)+SimEmisorReceptor.getT18()-0.01);
-                        
+                            message(inicio+" Ranking acumulado SciFi: "+SimEmisorReceptor.getT18());
+
+                        SimEmisorReceptor.setT18(SimEmisorReceptor.formulaRanking(SciFi)+SimEmisorReceptor.getT18()-SimEmisorReceptor.enfria);
+
                         SciFi = SimEmisorReceptor.objetoFecha(18, SimEmisorReceptor.getTiempo());
+
+                        SciFi.setRanking(SimEmisorReceptor.getT18());
                     }
                     
                     if (mensaje == null){

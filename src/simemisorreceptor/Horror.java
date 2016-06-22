@@ -45,6 +45,7 @@ public class Horror extends JSimProcess
                 
                 while (true)
                 {
+                    inicio = Horror.getFecha();
                     message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< leyendo bandeja mensajes de entrada <<");
                     mensaje = receiveMessageWithoutBlocking(box13);
                     if(inicio != SimEmisorReceptor.getTiempo()){
@@ -53,10 +54,13 @@ public class Horror extends JSimProcess
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
                         if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Horror)))
-                            message("Ranking anterior Horror: "+SimEmisorReceptor.formulaRanking(Horror));  
-                        SimEmisorReceptor.setT13(SimEmisorReceptor.formulaRanking(Horror)+SimEmisorReceptor.getT13()-0.01);
-                        
+                            message(inicio+" Ranking acumulado Horror: "+SimEmisorReceptor.getT13());
+
+                        SimEmisorReceptor.setT13(SimEmisorReceptor.formulaRanking(Horror)+SimEmisorReceptor.getT13()-SimEmisorReceptor.enfria);
+
                         Horror = SimEmisorReceptor.objetoFecha(13, SimEmisorReceptor.getTiempo());
+
+                        Horror.setRanking(SimEmisorReceptor.getT13());
                     }
                     if (mensaje == null){
                         message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< bandeja vacia <<");

@@ -44,7 +44,8 @@ public class Western extends JSimProcess
                 myReview Western = SimEmisorReceptor.objetoFecha(22, inicio);
                 
                 while (true)
-                {                    
+                {                  
+                    inicio = Western.getFecha();
                     message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< leyendo bandeja mensajes de entrada <<");
                     mensaje = receiveMessageWithoutBlocking(box22);
                     if(inicio != SimEmisorReceptor.getTiempo()){
@@ -53,10 +54,13 @@ public class Western extends JSimProcess
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
                         if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Western)))
-                            message("Ranking anterior Western: "+SimEmisorReceptor.formulaRanking(Western));
-                        SimEmisorReceptor.setT22(SimEmisorReceptor.formulaRanking(Western)+SimEmisorReceptor.getT22()-0.01);
-                        
+                            message(inicio+" Ranking acumulado Western: "+SimEmisorReceptor.getT22());
+
+                        SimEmisorReceptor.setT22(SimEmisorReceptor.formulaRanking(Western)+SimEmisorReceptor.getT22()-SimEmisorReceptor.enfria);
+
                         Western = SimEmisorReceptor.objetoFecha(22, SimEmisorReceptor.getTiempo());
+
+                        Western.setRanking(SimEmisorReceptor.getT22());
                     }
                     
                     if (mensaje == null){

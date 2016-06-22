@@ -45,7 +45,7 @@ public class Biography extends JSimProcess
                 
                 while (true)
                 {
-                    boolean validaTopico = false;
+                    inicio = Biography.getFecha();
                     
                     message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< leyendo bandeja mensajes de entrada <<");
                     mensaje = receiveMessageWithoutBlocking(box4);
@@ -56,10 +56,13 @@ public class Biography extends JSimProcess
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
                         if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Biography)))
-                            message("Ranking anterior Biografia: "+SimEmisorReceptor.formulaRanking(Biography));
-                        SimEmisorReceptor.setT4(SimEmisorReceptor.formulaRanking(Biography)+SimEmisorReceptor.getT4()-0.01);
-                        
+                            message(inicio+" Ranking acumulado Biography: "+SimEmisorReceptor.getT4());
+
+                        SimEmisorReceptor.setT4(SimEmisorReceptor.formulaRanking(Biography)+SimEmisorReceptor.getT4()-SimEmisorReceptor.enfria);
+
                         Biography = SimEmisorReceptor.objetoFecha(4, SimEmisorReceptor.getTiempo());
+
+                        Biography.setRanking(SimEmisorReceptor.getT4());
                     }
                     
                     if (mensaje == null){

@@ -44,7 +44,8 @@ public class History extends JSimProcess
                 myReview History = SimEmisorReceptor.objetoFecha(12, inicio);
                 
                 while (true)
-                {                    
+                {              
+                    inicio = History.getFecha();
                     message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< leyendo bandeja mensajes de entrada <<");
                     mensaje = receiveMessageWithoutBlocking(box12);
                     
@@ -54,10 +55,13 @@ public class History extends JSimProcess
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
                         if(!Double.isNaN(SimEmisorReceptor.formulaRanking(History)))
-                            message("Ranking anterior Historia: "+SimEmisorReceptor.formulaRanking(History));
-                        SimEmisorReceptor.setT12(SimEmisorReceptor.formulaRanking(History)+SimEmisorReceptor.getT12()-0.01);
-                        
+                            message(inicio+" Ranking acumulado History: "+SimEmisorReceptor.getT12());
+
+                        SimEmisorReceptor.setT12(SimEmisorReceptor.formulaRanking(History)+SimEmisorReceptor.getT12()-SimEmisorReceptor.enfria);
+
                         History = SimEmisorReceptor.objetoFecha(12, SimEmisorReceptor.getTiempo());
+
+                        History.setRanking(SimEmisorReceptor.getT12());
                     }
                     
                     if (mensaje == null){

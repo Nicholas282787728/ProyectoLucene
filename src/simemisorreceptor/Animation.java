@@ -45,7 +45,7 @@ public class Animation extends JSimProcess
                 
                 while (true)
                 {
-                    boolean validaTopico = false;
+                    inicio = Animation.getFecha();
                     
                     message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< leyendo bandeja mensajes de entrada <<");
                     mensaje = receiveMessageWithoutBlocking(box3);
@@ -55,10 +55,13 @@ public class Animation extends JSimProcess
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
                         if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Animation)))
-                            message("Ranking anterior Animacion: "+SimEmisorReceptor.formulaRanking(Animation));
-                        SimEmisorReceptor.setT3(SimEmisorReceptor.formulaRanking(Animation)+SimEmisorReceptor.getT3()-0.01);
-                        
+                            message(inicio+" Ranking acumulado Animation: "+SimEmisorReceptor.getT3());
+
+                        SimEmisorReceptor.setT3(SimEmisorReceptor.formulaRanking(Animation)+SimEmisorReceptor.getT3()-SimEmisorReceptor.enfria);
+
                         Animation = SimEmisorReceptor.objetoFecha(3, SimEmisorReceptor.getTiempo());
+
+                        Animation.setRanking(SimEmisorReceptor.getT3());
                     }
                     if (mensaje == null){
                         message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< bandeja vacia <<");

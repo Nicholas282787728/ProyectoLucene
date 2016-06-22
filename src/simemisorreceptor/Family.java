@@ -45,6 +45,7 @@ public class Family extends JSimProcess
                 
                 while (true)
                 {
+                    inicio = Family.getFecha();
                     
                     message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< leyendo bandeja mensajes de entrada <<");
                     mensaje = receiveMessageWithoutBlocking(box9);
@@ -55,10 +56,13 @@ public class Family extends JSimProcess
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
                         if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Family)))
-                            message("Ranking anterior Familiar: "+SimEmisorReceptor.formulaRanking(Family));
-                        SimEmisorReceptor.setT9(SimEmisorReceptor.formulaRanking(Family)+SimEmisorReceptor.getT9()-0.01);
-                        
+                            message(inicio+" Ranking acumulado Family: "+SimEmisorReceptor.getT9());
+
+                        SimEmisorReceptor.setT9(SimEmisorReceptor.formulaRanking(Family)+SimEmisorReceptor.getT9()-SimEmisorReceptor.enfria);
+
                         Family = SimEmisorReceptor.objetoFecha(9, SimEmisorReceptor.getTiempo());
+
+                        Family.setRanking(SimEmisorReceptor.getT9());
                     }
                     
                     if (mensaje == null){

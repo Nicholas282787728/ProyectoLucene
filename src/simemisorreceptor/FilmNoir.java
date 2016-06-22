@@ -44,7 +44,8 @@ public class FilmNoir extends JSimProcess
                 myReview FilmNoir = SimEmisorReceptor.objetoFecha(11, inicio);
                 
                 while (true)
-                {                    
+                {                 
+                    inicio = FilmNoir.getFecha();
                     message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< leyendo bandeja mensajes de entrada <<");
                     mensaje = receiveMessageWithoutBlocking(box11);
                     if(inicio != SimEmisorReceptor.getTiempo()){
@@ -53,10 +54,13 @@ public class FilmNoir extends JSimProcess
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
                         if(!Double.isNaN(SimEmisorReceptor.formulaRanking(FilmNoir)))
-                            message("Ranking anterior FilmNoir: "+SimEmisorReceptor.formulaRanking(FilmNoir));
-                        SimEmisorReceptor.setT11(SimEmisorReceptor.formulaRanking(FilmNoir)+SimEmisorReceptor.getT11()-0.01);
-                        
+                            message(inicio+" Ranking acumulado FilmNoir: "+SimEmisorReceptor.getT11());
+
+                        SimEmisorReceptor.setT11(SimEmisorReceptor.formulaRanking(FilmNoir)+SimEmisorReceptor.getT11()-SimEmisorReceptor.enfria);
+
                         FilmNoir = SimEmisorReceptor.objetoFecha(11, SimEmisorReceptor.getTiempo());
+
+                        FilmNoir.setRanking(SimEmisorReceptor.getT11());
                     }
                     if (mensaje == null){
                         message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< bandeja vacia <<");

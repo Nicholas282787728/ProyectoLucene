@@ -42,10 +42,9 @@ public class Drama extends JSimProcess
             {
                 int inicio = SimEmisorReceptor.getTiempo();
                 myReview Drama = SimEmisorReceptor.objetoFecha(8, inicio);
-                
                 while (true)
                 {
-                    
+                    inicio = Drama.getFecha();
                     message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< leyendo bandeja mensajes de entrada <<");
                     mensaje = receiveMessageWithoutBlocking(box8);
                     
@@ -55,10 +54,13 @@ public class Drama extends JSimProcess
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
                         if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Drama)))
-                            message("Ranking anterior Drama: "+SimEmisorReceptor.formulaRanking(Drama));
-                        SimEmisorReceptor.setT8(SimEmisorReceptor.formulaRanking(Drama)+SimEmisorReceptor.getT8()-0.01);
+                            message(inicio+" Ranking acumulado Drama: "+SimEmisorReceptor.getT8());
                         
+                        SimEmisorReceptor.setT8(SimEmisorReceptor.formulaRanking(Drama)+SimEmisorReceptor.getT8()-SimEmisorReceptor.enfria);
+
                         Drama = SimEmisorReceptor.objetoFecha(8, SimEmisorReceptor.getTiempo());
+                        
+                        Drama.setRanking(SimEmisorReceptor.getT8());
                     }
                     
                     if (mensaje == null){

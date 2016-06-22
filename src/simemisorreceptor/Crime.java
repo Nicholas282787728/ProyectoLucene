@@ -45,7 +45,7 @@ public class Crime extends JSimProcess
                 
                 while (true)
                 {
-                    boolean validaTopico = false;
+                    inicio = Crime.getFecha();
                     
                     message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< leyendo bandeja mensajes de entrada <<");
                     mensaje = receiveMessageWithoutBlocking(box6);
@@ -56,10 +56,13 @@ public class Crime extends JSimProcess
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
                         if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Crime)))
-                            message("Ranking anterior Crimen: "+SimEmisorReceptor.formulaRanking(Crime));
-                        SimEmisorReceptor.setT6(SimEmisorReceptor.formulaRanking(Crime)+SimEmisorReceptor.getT6()-0.01);
-                        
+                            message(inicio+" Ranking acumulado Crime: "+SimEmisorReceptor.getT6());
+
+                        SimEmisorReceptor.setT6(SimEmisorReceptor.formulaRanking(Crime)+SimEmisorReceptor.getT6()-SimEmisorReceptor.enfria);
+
                         Crime = SimEmisorReceptor.objetoFecha(6, SimEmisorReceptor.getTiempo());
+
+                        Crime.setRanking(SimEmisorReceptor.getT6());
                     }
                     if (mensaje == null){
                         message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< bandeja vacia <<");

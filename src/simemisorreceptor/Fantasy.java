@@ -45,6 +45,7 @@ public class Fantasy extends JSimProcess
                 
                 while (true)
                 {                    
+                    inicio = Fantasy.getFecha();
                     message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< leyendo bandeja mensajes de entrada <<");
                     mensaje = receiveMessageWithoutBlocking(box10);
                     
@@ -54,10 +55,13 @@ public class Fantasy extends JSimProcess
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
                         if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Fantasy)))
-                            message("Ranking anterior Fantasia: "+SimEmisorReceptor.formulaRanking(Fantasy));
-                        SimEmisorReceptor.setT10(SimEmisorReceptor.formulaRanking(Fantasy)+SimEmisorReceptor.getT10()-0.01);
-                        
+                            message(inicio+" Ranking acumulado Fantasy: "+SimEmisorReceptor.getT10());
+
+                        SimEmisorReceptor.setT10(SimEmisorReceptor.formulaRanking(Fantasy)+SimEmisorReceptor.getT10()-SimEmisorReceptor.enfria);
+
                         Fantasy = SimEmisorReceptor.objetoFecha(10, SimEmisorReceptor.getTiempo());
+
+                        Fantasy.setRanking(SimEmisorReceptor.getT10());
                     }
                     
                     if (mensaje == null){

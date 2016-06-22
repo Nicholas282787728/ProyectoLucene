@@ -45,7 +45,7 @@ public class Adventure extends JSimProcess
                 
                 while (true)
                 {
-                    
+                    inicio = Adventure.getFecha();
                     message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< leyendo bandeja mensajes de entrada <<");
                     mensaje = receiveMessageWithoutBlocking(box2);
                     
@@ -55,10 +55,13 @@ public class Adventure extends JSimProcess
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
                         if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Adventure)))
-                            message("Ranking anterior Aventura: "+SimEmisorReceptor.formulaRanking(Adventure));
-                        SimEmisorReceptor.setT2(SimEmisorReceptor.formulaRanking(Adventure)+SimEmisorReceptor.getT2()-0.01);
-                        
+                            message(inicio+" Ranking acumulado Adventure: "+SimEmisorReceptor.getT2());
+
+                        SimEmisorReceptor.setT2(SimEmisorReceptor.formulaRanking(Adventure)+SimEmisorReceptor.getT2()-SimEmisorReceptor.enfria);
+
                         Adventure = SimEmisorReceptor.objetoFecha(2, SimEmisorReceptor.getTiempo());
+
+                        Adventure.setRanking(SimEmisorReceptor.getT2());
                     }
                     
                     if (mensaje == null){

@@ -270,6 +270,8 @@ public class Emisor  extends JSimProcess
                 {
                     for(List<Review> r1Hoydia : this.reviews){
                         
+                        SimEmisorReceptor.setTiempo(r1Hoydia.get(0).getFecha());
+                        
                         for(Review rHoydia : r1Hoydia){
 
                             SimEmisorReceptor.setTiempo(rHoydia.getFecha());

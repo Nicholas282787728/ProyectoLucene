@@ -44,7 +44,8 @@ public class Sport extends JSimProcess
                 myReview Sport = SimEmisorReceptor.objetoFecha(19, inicio);
                 
                 while (true)
-                {                    
+                {                 
+                    inicio = Sport.getFecha();
                     message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< leyendo bandeja mensajes de entrada <<");
                     mensaje = receiveMessageWithoutBlocking(box19);
                     if(inicio != SimEmisorReceptor.getTiempo()){
@@ -53,10 +54,13 @@ public class Sport extends JSimProcess
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
                         if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Sport)))
-                            message("Ranking anterior Deportes: "+SimEmisorReceptor.formulaRanking(Sport));
-                        SimEmisorReceptor.setT19(SimEmisorReceptor.formulaRanking(Sport)+SimEmisorReceptor.getT19()-0.01);
-                        
+                            message(inicio+" Ranking acumulado Sport: "+SimEmisorReceptor.getT19());
+
+                        SimEmisorReceptor.setT19(SimEmisorReceptor.formulaRanking(Sport)+SimEmisorReceptor.getT19()-SimEmisorReceptor.enfria);
+
                         Sport = SimEmisorReceptor.objetoFecha(19, SimEmisorReceptor.getTiempo());
+
+                        Sport.setRanking(SimEmisorReceptor.getT19());
                     }
                     if (mensaje == null){
                         message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< bandeja vacia <<");

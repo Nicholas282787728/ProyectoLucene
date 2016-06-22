@@ -23,7 +23,7 @@ public class SimEmisorReceptor {
      */
     public static int tiempo = 19990418;
     public static int alpha = 2;
-    
+    public static double enfria = 1.0; 
     public static double t1 = 0.0;
     public static double t2 = 0.0;
     public static double t3 = 0.0;
@@ -47,6 +47,14 @@ public class SimEmisorReceptor {
     public static double t21 = 0.0;
     public static double t22 = 0.0;
 
+    
+    public static double getEnfria() {
+        return enfria;
+    }
+
+    public static void setEnfria(double enfria) {
+        SimEmisorReceptor.enfria = enfria;
+    }
     public static double getT1() {
         return t1;
     }
@@ -372,8 +380,10 @@ public class SimEmisorReceptor {
     public static double formulaRanking(myReview s) {
         double valorRanking;       
        //((s.getC11()*s.getScore()+s.getC21())/alpha+alpha*(s.getC12()*s.getScore()+s.getC22())+s.getC13()*s.getScore()+s.getC23())/(alpha*C)
-        valorRanking = s.getParcial()/(alpha*s.getNumeroReviews());
-        
+        if(s.getNumeroReviews()!=0)
+            valorRanking = s.getParcial()/(alpha*s.getNumeroReviews());
+        else
+            valorRanking = 0.0;
         return valorRanking;
     }
     

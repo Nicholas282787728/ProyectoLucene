@@ -21,6 +21,7 @@ public class myReview {
     private double c23;
     private double parcial;
     private int numeroReviews;
+    private double ranking;
     
     public myReview(){
         this.fecha = 0;
@@ -33,13 +34,14 @@ public class myReview {
         this.c23 = 0.0;
         this.parcial = 0.0;
         this.numeroReviews = 0;
+        this.ranking = 0.0;
     }
     
     public myReview(int fecha){
         this.fecha = fecha;
     }
     
-    public myReview(int fecha, double score, double c11, double c12, double c13, double c21, double c22, double c23, double parcial, int numeroReviews){
+    public myReview(int fecha, double score, double c11, double c12, double c13, double c21, double c22, double c23, double parcial, int numeroReviews, double ranking){
         this.fecha = fecha;
         this.score = score;
         this.c11 = c11;
@@ -50,8 +52,19 @@ public class myReview {
         this.c23 = c23;
         this.parcial = parcial;
         this.numeroReviews = numeroReviews;
+        this.ranking = ranking;
     }
 
+    public double getRanking() {
+        return ranking;
+    }
+
+    public void setRanking(double ranking) {
+        this.ranking = ranking;
+    }
+
+    
+    
     public int getFecha() {
         return fecha;
     }

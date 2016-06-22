@@ -45,6 +45,7 @@ public class Romance extends JSimProcess
                 
                 while (true)
                 {
+                    inicio = Romance.getFecha();
                     message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< leyendo bandeja mensajes de entrada <<");
                     mensaje = receiveMessageWithoutBlocking(box17);
                     
@@ -54,10 +55,13 @@ public class Romance extends JSimProcess
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
                         if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Romance)))
-                            message("Ranking anterior Romance: "+SimEmisorReceptor.formulaRanking(Romance));
-                        SimEmisorReceptor.setT17(SimEmisorReceptor.formulaRanking(Romance)+SimEmisorReceptor.getT17()-0.01);
-                        
+                            message(inicio+" Ranking acumulado Romance: "+SimEmisorReceptor.getT17());
+
+                        SimEmisorReceptor.setT17(SimEmisorReceptor.formulaRanking(Romance)+SimEmisorReceptor.getT17()-SimEmisorReceptor.enfria);
+
                         Romance = SimEmisorReceptor.objetoFecha(17, SimEmisorReceptor.getTiempo());
+
+                        Romance.setRanking(SimEmisorReceptor.getT17());
                     }
                     
                     if (mensaje == null){

@@ -45,7 +45,7 @@ public class Documentary extends JSimProcess
                 
                 while (true)
                 {
-                    boolean validaTopico = false;
+                    inicio = Documentary.getFecha();
                     
                     message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< leyendo bandeja mensajes de entrada <<");
                     mensaje = receiveMessageWithoutBlocking(box7);
@@ -56,10 +56,13 @@ public class Documentary extends JSimProcess
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
                         if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Documentary)))
-                            message("Ranking anterior Documental: "+SimEmisorReceptor.formulaRanking(Documentary));
-                        SimEmisorReceptor.setT7(SimEmisorReceptor.formulaRanking(Documentary)+SimEmisorReceptor.getT7()-0.01);
-                        
+                            message(inicio+" Ranking acumulado Documentary: "+SimEmisorReceptor.getT7());
+
+                        SimEmisorReceptor.setT7(SimEmisorReceptor.formulaRanking(Documentary)+SimEmisorReceptor.getT7()-SimEmisorReceptor.enfria);
+
                         Documentary = SimEmisorReceptor.objetoFecha(7, SimEmisorReceptor.getTiempo());
+
+                        Documentary.setRanking(SimEmisorReceptor.getT7());
                     }
                     
                     if (mensaje == null){

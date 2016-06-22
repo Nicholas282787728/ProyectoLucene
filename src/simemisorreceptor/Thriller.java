@@ -44,7 +44,8 @@ public class Thriller extends JSimProcess
                 myReview Thriller = SimEmisorReceptor.objetoFecha(20, inicio);
                 
                 while (true)
-                {                    
+                {           
+                    inicio = Thriller.getFecha();
                     message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< leyendo bandeja mensajes de entrada <<");
                     mensaje = receiveMessageWithoutBlocking(box20);
                     if(inicio != SimEmisorReceptor.getTiempo()){
@@ -53,10 +54,13 @@ public class Thriller extends JSimProcess
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
                         if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Thriller)))
-                            message("Ranking anterior Thriller: "+SimEmisorReceptor.formulaRanking(Thriller));
-                        SimEmisorReceptor.setT20(SimEmisorReceptor.formulaRanking(Thriller)+SimEmisorReceptor.getT20()-0.01);
-                        
+                            message(inicio+" Ranking acumulado Thriller: "+SimEmisorReceptor.getT20());
+
+                        SimEmisorReceptor.setT20(SimEmisorReceptor.formulaRanking(Thriller)+SimEmisorReceptor.getT20()-SimEmisorReceptor.enfria);
+
                         Thriller = SimEmisorReceptor.objetoFecha(20, SimEmisorReceptor.getTiempo());
+
+                        Thriller.setRanking(SimEmisorReceptor.getT20());
                     }
                     
                     if (mensaje == null){

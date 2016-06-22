@@ -45,7 +45,7 @@ public class Mystery extends JSimProcess
                 
                 while (true)
                 {
-
+                    inicio = Mystery.getFecha();
                     message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< leyendo bandeja mensajes de entrada <<");
                     mensaje = receiveMessageWithoutBlocking(box16);
                     if(inicio != SimEmisorReceptor.getTiempo()){
@@ -54,10 +54,13 @@ public class Mystery extends JSimProcess
                            LLAMAR FUNCION DE RANKING Y ESCRIBIR
                         *****************************************/
                         if(!Double.isNaN(SimEmisorReceptor.formulaRanking(Mystery)))
-                            message("Ranking anterior Misterio: "+SimEmisorReceptor.formulaRanking(Mystery));
-                        SimEmisorReceptor.setT16(SimEmisorReceptor.formulaRanking(Mystery)+SimEmisorReceptor.getT16()-0.01);
-                        
+                            message(inicio+" Ranking acumulado Mystery: "+SimEmisorReceptor.getT16());
+
+                        SimEmisorReceptor.setT16(SimEmisorReceptor.formulaRanking(Mystery)+SimEmisorReceptor.getT16()-SimEmisorReceptor.enfria);
+
                         Mystery = SimEmisorReceptor.objetoFecha(16, SimEmisorReceptor.getTiempo());
+
+                        Mystery.setRanking(SimEmisorReceptor.getT16());
                     }
                     if (mensaje == null){
                         message(SimEmisorReceptor.FormatoFecha(SimEmisorReceptor.getTiempo()) + " - " + getName() + "< bandeja vacia <<");
